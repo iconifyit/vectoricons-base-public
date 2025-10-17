@@ -18,8 +18,8 @@
     "test:integration": "jest --selectProjects integration --verbose --noStackTrace --runInBand",
     "test:coverage": "jest --coverage --noStackTrace --runInBand",
     "test:watch": "jest --watch",
-    "docs:generate": "documentation build 'src/common/BaseService.js' 'src/common/BaseRepository.js' 'src/common/BaseEntity.js' 'src/common/cursor/CursorEncoder.js' 'src/common/mixins/repository/withCursorPagination.js' 'src/common/cache/CacheService.js' 'src/common/cache/adapters/RedisCacheAdapter.js' 'src/common/cache/adapters/NodeCacheAdapter.js' 'src/common/event-bus/EventBus.js' 'src/common/access-control/AccessControlService.js' 'src/aws/S3Service.js' 'src/aws/SQSService.js' 'src/aws/SNSService.js' 'src/products/**/*Entity.js' 'src/products/**/*Repository.js' 'src/products/**/*Service.js' 'src/images/**/*Entity.js' 'src/images/**/*Repository.js' 'src/images/**/*Service.js' 'src/carts/**/*Entity.js' 'src/carts/**/*Repository.js' 'src/carts/**/*Service.js' 'src/orders/**/*Entity.js' 'src/orders/**/*Repository.js' 'src/orders/**/*Service.js' 'src/transactions/**/*Entity.js' 'src/transactions/**/*Repository.js' 'src/transactions/**/*Service.js' 'src/downloads/**/*Entity.js' 'src/downloads/**/*Repository.js' 'src/downloads/**/*Service.js' 'src/favorites/**/*Entity.js' 'src/favorites/**/*Repository.js' 'src/favorites/**/*Service.js' '!src/**/__tests__/**' '!src/**/*.test.js' -f html -o docs --project-name 'VectorIcons Backend' --project-version 1.0.0",
-    "docs:serve": "documentation serve 'src/common/access-control/**/*.js' 'src/common/cache/**/*.js' 'src/common/event-bus/**/*.js' --watch"
+    "docs:generate": "rm -rf docs && jsdoc -c jsdoc.json && node scripts/organize-docs-nav.js",
+    "docs:serve": "npx http-server docs -p 8080"
   },
   "dependencies": {
     "@fastify/env": "^5.0.2",
@@ -42,10 +42,11 @@
   },
   "devDependencies": {
     "aws-sdk-mock": "^6.2.1",
-    "documentation": "^14.0.0",
+    "better-docs": "^2.7.3",
     "dotenv": "^16.4.7",
     "dotenv-cli": "^9.0.0",
     "jest": "^29.7.0",
+    "jsdoc": "^4.0.5",
     "supertest": "^7.1.4"
   },
   "jest": {

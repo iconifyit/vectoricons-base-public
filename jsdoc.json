@@ -1,0 +1,81 @@
+{
+  "source": {
+    "include": [
+      "src/common/BaseService.js",
+      "src/common/BaseRepository.js",
+      "src/common/BaseEntity.js",
+      "src/common/cursor/CursorEncoder.js",
+      "src/common/mixins/repository/withCursorPagination.js",
+      "src/common/cache/CacheService.js",
+      "src/common/cache/adapters/RedisCacheAdapter.js",
+      "src/common/cache/adapters/NodeCacheAdapter.js",
+      "src/common/cache/adapters/CacheAdapter.js",
+      "src/common/event-bus/EventBus.js",
+      "src/common/event-bus/Event.js",
+      "src/common/event-bus/adapters/BaseEventBusAdapter.js",
+      "src/common/event-bus/adapters/MemoryAdapter.js",
+      "src/common/event-bus/adapters/RedisAdapter.js",
+      "src/common/access-control/AccessControlService.js",
+      "src/aws/s3/S3Service.js",
+      "src/aws/sqs/SQSService.js",
+      "src/aws/sns/SNSService.js",
+      "src/products",
+      "src/images",
+      "src/carts",
+      "src/orders",
+      "src/transactions",
+      "src/downloads",
+      "src/favorites"
+    ],
+    "includePattern": ".+\\.(js|jsx)$",
+    "excludePattern": "(node_modules|__tests__|test|spec)"
+  },
+  "opts": {
+    "template": "node_modules/better-docs",
+    "encoding": "utf8",
+    "destination": "./docs",
+    "recurse": true,
+    "verbose": true
+  },
+  "plugins": [
+    "plugins/markdown"
+  ],
+  "templates": {
+    "better-docs": {
+      "name": "VectorIcons Service Layer",
+      "title": "VectorIcons Service Layer Documentation",
+      "navigation": [
+        {
+          "label": "Core Infrastructure",
+          "items": ["BaseService", "BaseRepository", "BaseEntity"]
+        },
+        {
+          "label": "Cursor Pagination",
+          "items": ["CursorEncoder", "withCursorPagination"]
+        },
+        {
+          "label": "Caching Layer",
+          "items": ["CacheService", "RedisCacheAdapter", "NodeCacheAdapter", "CacheAdapter"]
+        },
+        {
+          "label": "Event System",
+          "items": ["EventBus", "Event", "BaseEventBusAdapter", "MemoryEventBusAdapter", "RedisEventBusAdapter"]
+        },
+        {
+          "label": "Access Control",
+          "items": ["AccessControlService"]
+        },
+        {
+          "label": "AWS Integration",
+          "items": ["S3Service", "SNSService", "SQSService"]
+        }
+      ]
+    },
+    "cleverLinks": false,
+    "monospaceLinks": false,
+    "default": {
+      "outputSourceFiles": true,
+      "includeDate": false
+    }
+  }
+}
