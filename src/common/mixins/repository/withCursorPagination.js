@@ -6,7 +6,7 @@
  *
  * **Problem with Offset Pagination:**
  * ```sql
- * SELECT * FROM icons WHERE ... OFFSET 10000 LIMIT 20;
+ * SELECT * FROM icons WHERE price = 0 OFFSET 10000 LIMIT 20;
  * -- Must scan 10,000 rows to skip them! O(n) complexity
  * ```
  *
@@ -59,9 +59,10 @@
  *
  * @example
  * // Use cursor pagination (array position sorting for Elasticsearch)
+ * const esRankedIds = [1001, 2003, 5005, 3002]; // From Elasticsearch
  * const result = await iconRepo.cursorPaginate({
  *   filters: {
- *     iconIdsOrder: [1001, 2003, 5005, 3002, ...],  // ES ranked IDs
+ *     iconIdsOrder: esRankedIds,  // ES ranked IDs
  *     price: 'free'
  *   },
  *   cursor: null,
@@ -72,12 +73,12 @@
  *
  * // Returns:
  * {
- *   results: [...],        // Entity instances
+ *   results: [Icon, Icon, Icon],  // Entity instances
  *   pageInfo: {
  *     hasNextPage: true,
  *     hasPreviousPage: false,
- *     startCursor: 'eyJ...',
- *     endCursor: 'eyJ...',
+ *     startCursor: 'eyJpZCI6MTAwMX0=',
+ *     endCursor: 'eyJpZCI6MTAyMH0=',
  *     totalCount: 1500  // Optional, expensive
  *   }
  * }
@@ -194,10 +195,10 @@ const withCursorPagination = (BaseClass) => {
          * });
          *
          * @example
-         * // Next page (using endCursor from page1)
+         * // Next page (using cursor from previous page)
          * const page2 = await repo.cursorPaginate({
          *   filters: { price: 'free' },
-         *   cursor: page1.pageInfo.endCursor,
+         *   cursor: 'eyJpZCI6MTAyMCwiY3JlYXRlZEF0IjoiMjAyNC0wMS0xNVQxMDowMDowMFoifQ==',
          *   limit: 20,
          *   sortBy: 'createdAt',
          *   sortOrder: 'desc'
@@ -296,7 +297,7 @@ const withCursorPagination = (BaseClass) => {
             // Step 3: Apply sorting
             // ================================================================
             if (isArrayPositionSort) {
-                // Array position sort: ORDER BY array_position(ARRAY[...], id)
+                // Array position sort: ORDER BY array_position(ARRAY[iconIdsOrder], id)
                 query = this._applyArrayPositionSort(query, filters.iconIdsOrder, sortOrder);
             } else {
                 // Field-based sort: ORDER BY field, id
@@ -486,7 +487,8 @@ const withCursorPagination = (BaseClass) => {
          *
          * @example
          * // Cursor: { arrayPosition: 20, id: 5005 }
-         * // Query: WHERE array_position(ARRAY[1001, 2003, ...], id) > 20
+         * // iconIdsOrder: [1001, 2003, 5005, 3002] (from Elasticsearch)
+         * // Query: WHERE array_position(ARRAY[iconIdsOrder], id) > 20
          */
         _applyArrayPositionCursor(query, cursorData, iconIdsOrder, sortOrder) {
             const operator = sortOrder.toLowerCase() === 'asc' ? '>' : '<';
@@ -521,7 +523,8 @@ const withCursorPagination = (BaseClass) => {
          * @returns {Object} Modified query
          *
          * @example
-         * // ORDER BY array_position(ARRAY[1001, 2003, 5005, ...], id) ASC
+         * // iconIdsOrder: [1001, 2003, 5005, 3002] (from Elasticsearch)
+         * // ORDER BY array_position(ARRAY[iconIdsOrder], id) ASC
          */
         _applyArrayPositionSort(query, iconIdsOrder, sortOrder) {
             const sortDirection = sortOrder.toLowerCase() === 'asc' ? 'ASC' : 'DESC';
@@ -551,8 +554,8 @@ const withCursorPagination = (BaseClass) => {
          * @returns {string} Encoded cursor token
          *
          * @example
-         * // Entity: { id: 5005, ... }
-         * // iconIdsOrder: [1001, 2003, 5005, ...]
+         * // Entity: { id: 5005, name: 'home-icon' }
+         * // iconIdsOrder: [1001, 2003, 5005, 3002] (from Elasticsearch)
          * // Cursor: { arrayPosition: 3, id: 5005, sortType: 'arrayPosition' }
          */
         _createArrayPositionCursor(entity, iconIdsOrder) {

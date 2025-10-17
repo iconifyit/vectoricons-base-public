@@ -90,8 +90,9 @@ class RawIconRepository extends BaseRepository {
      *
      * @example
      * // With Elasticsearch relevance (ordered IDs)
+     * const esRankedIds = [1001, 2003, 5005, 3002];
      * query = this._applyFilters(query, {
-     *   iconIdsOrder: [1001, 2003, 5005, ...],  // Elasticsearch ranked order
+     *   iconIdsOrder: esRankedIds,  // Elasticsearch ranked order
      *   price: 'free'
      * });
      */
@@ -218,10 +219,10 @@ class RawIconRepository extends BaseRepository {
  * });
  *
  * @example
- * // Next page
+ * // Next page (using cursor from previous page)
  * const page2 = await iconRepo.cursorPaginate({
  *   filters: { price: 'free' },
- *   cursor: result.pageInfo.endCursor,
+ *   cursor: 'eyJpZCI6MTAyMCwiY3JlYXRlZEF0IjoiMjAyNC0wMS0xNVQxMDowMDowMFoifQ==',
  *   limit: 20
  * });
  */

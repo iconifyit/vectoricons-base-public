@@ -195,10 +195,10 @@ class CacheService {
      * @example
      * // Custom adapter implementation
      * class CustomAdapter {
-     *   async get(key) { /* ... */ }
-     *   async set(key, value, ttl) { /* ... */ }
-     *   async del(keys) { /* ... */ }
-     *   async keys() { /* ... */ }
+     *   async get(key) { return null; }
+     *   async set(key, value, ttl) { return; }
+     *   async del(keys) { return; }
+     *   async keys() { return []; }
      * }
      * const cache = new CacheService(new CustomAdapter());
      */
