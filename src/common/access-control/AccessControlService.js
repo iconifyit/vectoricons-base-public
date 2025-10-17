@@ -12,19 +12,20 @@ const { UserRoles } = require('../../utils/enums');
  *
  * **Priority-Based Evaluation:**
  * ```
- * ┌─────────────────────────────────────────────┐
- * │ 1. DenyAll Role?        → DENY (highest)    │
- * │    └─> Always denies, even for admins       │
- * ├─────────────────────────────────────────────┤
- * │ 2. Admin/SuperAdmin?    → GRANT             │
- * │    └─> Full access to all resources         │
- * ├─────────────────────────────────────────────┤
- * │ 3. Resource Owner?      → GRANT             │
- * │    └─> actor.id === resource.ownerId        │
- * ├─────────────────────────────────────────────┤
- * │ 4. Default              → DENY (secure)     │
- * │    └─> Deny by default (least privilege)    │
- * └─────────────────────────────────────────────┘
+ * ┌──────────────────────────────────────────────────────┐
+ * │ 1. DenyAll Role?        → DENY (highest priority)    │
+ * │    └─> Banned users, overrides everything            │
+ * ├──────────────────────────────────────────────────────┤
+ * │ 2. Guest Role?          → Public resources only      │
+ * │    └─> Read-only access to public data               │
+ * ├──────────────────────────────────────────────────────┤
+ * │ 3. Resource Owner?      → GRANT                      │
+ * │    └─> Users can manage their own content            │
+ * │    └─> actor.id === resource.ownerId                 │
+ * ├──────────────────────────────────────────────────────┤
+ * │ 4. Default              → DENY (least privilege)     │
+ * │    └─> Secure by default, explicit grants only       │
+ * └──────────────────────────────────────────────────────┘
  * ```
  *
  * **Architecture Integration:**
@@ -53,24 +54,20 @@ const { UserRoles } = require('../../utils/enums');
  *
  * **User Roles Hierarchy:**
  * - **DenyAll**: Banned/suspended users (highest priority, always denies)
- * - **SuperAdmin**: Full system access (all resources)
- * - **Admin**: Full access to managed resources
  * - **Customer**: Access to own resources only
- * - **Guest**: No resource access (read-only public data)
+ * - **Guest**: Read-only access to public resources
  *
  * **Security Principles:**
  * 1. **Deny by Default**: All requests denied unless explicitly granted
- * 2. **Priority-Based**: DenyAll overrides everything, including Admin
+ * 2. **Priority-Based**: DenyAll overrides everything
  * 3. **Ownership Model**: Users can access their own resources
- * 4. **Admin Override**: Admins have full access (except if DenyAll)
- * 5. **Type Coercion**: Handles string/number ID comparison safely
+ * 4. **Type Coercion**: Handles string/number ID comparison safely
  *
  * **Production Use Cases:**
  * 1. **CRUD Protection**: Automatic permission checks on service methods
  * 2. **Multi-Tenancy**: Ownership model isolates user data
- * 3. **Admin Tools**: SuperAdmin/Admin roles for support team
- * 4. **User Banning**: DenyAll role prevents access immediately
- * 5. **API Endpoints**: Enforce permissions before database queries
+ * 3. **User Banning**: DenyAll role prevents access immediately
+ * 4. **API Endpoints**: Enforce permissions before database queries
  *
  * **Policy Extensibility:**
  * The `policies` parameter allows custom access rules for future expansion:
@@ -82,8 +79,8 @@ const { UserRoles } = require('../../utils/enums');
  *       return actor.isVerified && resource.status === 'pending';
  *     },
  *     'icons:feature': (actor, resource) => {
- *       // Only admins can feature icons
- *       return actor.roles.some(r => r.value === UserRoles.Admin);
+ *       // Custom logic for featuring icons
+ *       return actor.canFeature === true;
  *     }
  *   }
  * });
@@ -101,13 +98,13 @@ const { UserRoles } = require('../../utils/enums');
  * // Returns: true (actor owns resource)
  *
  * @example
- * // Admin access
+ * // Non-owner access denied
  * const canDelete = await acl.enforce({
- *   actor: { id: 1, roles: [{ value: UserRoles.Admin }] },
+ *   actor: { id: 1, roles: [{ value: UserRoles.Customer }] },
  *   action: 'delete',
  *   resource: { ownerId: 456 }
  * });
- * // Returns: true (Admin can delete anything)
+ * // Returns: false (not the owner)
  *
  * @example
  * // DenyAll blocks everything
@@ -116,13 +113,13 @@ const { UserRoles } = require('../../utils/enums');
  *     id: 1,
  *     roles: [
  *       { value: UserRoles.DenyAll },
- *       { value: UserRoles.Admin }
+ *       { value: UserRoles.Customer }
  *     ]
  *   },
  *   action: 'read',
  *   resource: { ownerId: 1 }
  * });
- * // Returns: false (DenyAll overrides Admin)
+ * // Returns: false (DenyAll overrides everything)
  *
  * @example
  * // Integration with HTTP middleware
@@ -154,15 +151,15 @@ const { UserRoles } = require('../../utils/enums');
  * Role-Based Access Control (RBAC) service with hierarchical priority enforcement.
  *
  * AccessControlService provides a simple yet powerful RBAC implementation that:
- * - Evaluates access based on roles (DenyAll, Admin, SuperAdmin, Customer, Guest)
+ * - Evaluates access based on roles (DenyAll, Customer, Guest)
  * - Supports resource ownership (users can access their own resources)
  * - Integrates with service layer via withAccessControl mixin
- * - Uses priority-based evaluation (DenyAll > Admin > Ownership > Default Deny)
+ * - Uses priority-based evaluation (DenyAll > Ownership > Default Deny)
  * - Handles string/number ID comparison safely
  *
  * **How Priority Evaluation Works:**
  * 1. **DenyAll check first** - Banned users blocked immediately
- * 2. **Admin/SuperAdmin check** - Full access granted if admin
+ * 2. **Guest check** - Public resources only for guests
  * 3. **Ownership check** - Grant if actor owns resource
  * 4. **Default deny** - Secure by default (least privilege)
  *
@@ -235,13 +232,13 @@ const { UserRoles } = require('../../utils/enums');
  * const acl = new AccessControlService();
  *
  * @example
- * // Admin can access any resource
+ * // Guest can only access public resources
  * const result = await acl.enforce({
- *   actor: { id: 1, roles: [{ value: 'ROLE_ADMIN' }] },
- *   action: 'delete',
- *   resource: { ownerId: 999 }
+ *   actor: { id: null, roles: [{ value: 'ROLE_GUEST' }] },
+ *   action: 'read',
+ *   resource: { isPublic: true }
  * });
- * // Returns: true
+ * // Returns: true (public resource)
  *
  * @example
  * // Owner can access their own resources
@@ -262,13 +259,13 @@ const { UserRoles } = require('../../utils/enums');
  * // Returns: false
  *
  * @example
- * // DenyAll blocks even admins
+ * // DenyAll blocks all access
  * const result = await acl.enforce({
  *   actor: {
  *     id: 1,
  *     roles: [
  *       { value: 'ROLE_DENYALL' },
- *       { value: 'ROLE_ADMIN' }
+ *       { value: 'ROLE_CUSTOMER' }
  *     ]
  *   },
  *   action: 'read',
@@ -282,6 +279,9 @@ const { UserRoles } = require('../../utils/enums');
  *   policies: {
  *     'icons:publish': (actor, resource) => {
  *       return actor.isVerified && resource.status === 'pending';
+ *     },
+ *     'icons:download': (actor, resource) => {
+ *       return resource.isPublic || actor.hasPurchased(resource.id);
  *     }
  *   }
  * });
@@ -297,7 +297,7 @@ class AccessControlService {
      *
      * **Current Evaluation Logic:**
      * - DenyAll role → Deny
-     * - Admin/SuperAdmin role → Grant
+     * - Guest role → Public resources only
      * - Resource ownership (actor.id === resource.ownerId) → Grant
      * - Default → Deny
      *
@@ -318,8 +318,8 @@ class AccessControlService {
      *       return actor.isVerified && resource.status === 'pending';
      *     },
      *     'icons:feature': (actor, resource) => {
-     *       // Only admins or premium users can feature icons
-     *       return actor.isPremium || actor.roles.some(r => r.value === 'ROLE_ADMIN');
+     *       // Only premium users can feature icons
+     *       return actor.isPremium === true;
      *     }
      *   }
      * });
@@ -360,19 +360,19 @@ class AccessControlService {
      * @returns {boolean} True if actor has the specified role
      *
      * @example
-     * const hasAdmin = service.actorHasRole(user, UserRoles.Admin);
-     * // Returns: true if user has Admin role
+     * const hasGuest = service.actorHasRole(user, UserRoles.Guest);
+     * // Returns: true if user has Guest role
      *
      * @example
      * // Case-insensitive matching
-     * const actor = { roles: [{ value: 'ROLE_ADMIN' }] };
-     * service.actorHasRole(actor, 'role_admin'); // true
-     * service.actorHasRole(actor, UserRoles.Admin); // true
+     * const actor = { roles: [{ value: 'ROLE_CUSTOMER' }] };
+     * service.actorHasRole(actor, 'role_customer'); // true
+     * service.actorHasRole(actor, UserRoles.Customer); // true
      *
      * @example
      * // Handles null/undefined actors
-     * service.actorHasRole(null, UserRoles.Admin); // false
-     * service.actorHasRole({ roles: [] }, UserRoles.Admin); // false
+     * service.actorHasRole(null, UserRoles.Customer); // false
+     * service.actorHasRole({ roles: [] }, UserRoles.Customer); // false
      */
     actorHasRole(actor, roleEnum) {
         const needle = String(roleEnum).toLowerCase();
@@ -385,7 +385,7 @@ class AccessControlService {
      *
      * Evaluates access based on the following priority order:
      * 1. DenyAll role → Returns false (highest priority)
-     * 2. Admin or SuperAdmin role → Returns true
+     * 2. Guest role → Returns true only for public resources
      * 3. Resource ownership → Returns true if actor.id matches resource.ownerId
      * 4. Default → Returns false
      *
@@ -403,13 +403,13 @@ class AccessControlService {
      * @returns {Promise<boolean>} True if access is granted, false otherwise
      *
      * @example
-     * // Admin always has access
+     * // Guest can access public resources
      * const result = await service.enforce({
-     *   actor: { id: 1, roles: [{ value: UserRoles.Admin }] },
-     *   action: 'delete',
-     *   resource: { ownerId: 999 }
+     *   actor: { id: null, roles: [{ value: UserRoles.Guest }] },
+     *   action: 'read',
+     *   resource: { isPublic: true }
      * });
-     * // Returns: true (Admin overrides ownership)
+     * // Returns: true (public resource)
      *
      * @example
      * // Owner has access to their own resources
@@ -421,13 +421,13 @@ class AccessControlService {
      * // Returns: true (ownership grants access)
      *
      * @example
-     * // DenyAll prevents access even for admins
+     * // DenyAll prevents all access
      * const result = await service.enforce({
      *   actor: {
      *     id: 1,
      *     roles: [
      *       { value: UserRoles.DenyAll },
-     *       { value: UserRoles.Admin }
+     *       { value: UserRoles.Customer }
      *     ]
      *   },
      *   action: 'read',
