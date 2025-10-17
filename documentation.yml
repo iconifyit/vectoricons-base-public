@@ -35,7 +35,6 @@ projectHomepage: https://github.com/yourusername/vectoricons-portfolio
 projectVersion: 1.0.0
 
 markdownToc: true
-sortOrder: alpha
 
 infer:
   - kind: class

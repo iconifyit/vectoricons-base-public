@@ -18,8 +18,8 @@
     "test:integration": "jest --selectProjects integration --verbose --noStackTrace --runInBand",
     "test:coverage": "jest --coverage --noStackTrace --runInBand",
     "test:watch": "jest --watch",
-    "docs:generate": "documentation build src/** -f html -o docs --config documentation.yml",
-    "docs:serve": "documentation serve src/** --watch"
+    "docs:generate": "documentation build 'src/common/access-control/**/*.js' 'src/common/cache/**/*.js' 'src/common/event-bus/**/*.js' -f html -o docs --config documentation.yml --shallow",
+    "docs:serve": "documentation serve 'src/common/access-control/**/*.js' 'src/common/cache/**/*.js' 'src/common/event-bus/**/*.js' --watch"
   },
   "dependencies": {
     "@fastify/env": "^5.0.2",
