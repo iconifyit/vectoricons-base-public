@@ -1,19 +1,113 @@
 /* eslint-env node */
-const { withObservable } = require('./mixins/service');
+
 /**
- * BaseService
+ * @fileoverview BaseService - Business Logic Layer with Mixin Composition
  *
- * Responsibilities
- *  - Provide a thin, consistent service API over a repository.
- *  - Accept either POJOs or Entity instances for write operations.
- *  - Normalize inputs to plain objects before delegating to the repository.
+ * This is the heart of the Service-Oriented Architecture. BaseService provides:
+ * - Consistent CRUD API across all domain services
+ * - Automatic cross-cutting concerns via mixins (observability, caching, etc.)
+ * - Transaction support
+ * - Entity/POJO normalization
+ * - Graph (relation) query support
  *
- * Assumptions
- *  - The repository exposes the methods used below.
- *  - Entities implement toJSON() that returns a plain JS object (camelCase).
+ * **Architecture - The 3-Layer Pattern:**
+ * ```
+ * HTTP Layer (API routes, schemas)
+ *      ↓
+ * Service Layer (business logic) ← YOU ARE HERE
+ *      ↓
+ * Repository Layer (data access)
+ *      ↓
+ * Database (PostgreSQL)
+ * ```
+ *
+ * **Mixin Composition Pattern:**
+ * BaseService is actually `RawBaseService` wrapped with mixins. Each mixin adds
+ * functionality without modifying the base class:
+ *
+ * ```javascript
+ * // This file exports:
+ * const BaseService = withObservable(RawBaseService);
+ *
+ * // In production, the full composition would be:
+ * const BaseService =
+ *   withObservable(      // Automatic timing, metrics, logging
+ *   withCacheable(       // Read-through cache with entity rehydration
+ *   withPluggable(       // Event-driven plugins
+ *   withAccessControl(   // RBAC enforcement
+ *   withSoftDeletable(   // Soft delete support
+ *   withActivatable(     // Activation state management
+ *     RawBaseService     // Core CRUD operations
+ *   ))))));
+ * ```
+ *
+ * **Why Mixins?**
+ * - **Composable**: Pick which concerns each service needs
+ * - **Testable**: Test each concern independently
+ * - **No Fragile Base Class**: Avoid deep inheritance hierarchies
+ * - **Opt-In**: Services choose their mixins
+ *
+ * **Usage Pattern:**
+ * ```javascript
+ * class IconService extends BaseService {
+ *   constructor(opts = {}) {
+ *     super({
+ *       repository: new IconRepository(),
+ *       entityClass: IconEntity,
+ *       ...opts
+ *     });
+ *   }
+ *
+ *   // Custom business logic
+ *   async publishIcon(iconId, opts = {}) {
+ *     const icon = await this.getById(iconId, opts);
+ *     if (!icon) throw new Error('Icon not found');
+ *
+ *     // Validate business rules
+ *     if (!icon.svgPath) throw new Error('Icon has no SVG');
+ *
+ *     // Update with automatic observability, caching, events
+ *     return this.update(iconId, { isActive: true }, opts);
+ *   }
+ * }
+ * ```
+ *
+ * **What You Get Automatically:**
+ * - ✅ Timing/logging for all operations (via withObservable)
+ * - ✅ Metrics collection (operation duration, success/failure)
+ * - ✅ Event emission for monitoring
+ * - ✅ Consistent error handling
+ * - ✅ Transaction support
+ *
+ * @see {@link BaseRepository} For data access layer
+ * @see {@link BaseEntity} For entity layer
  */
 
+const { withObservable } = require('./mixins/service');
 
+/**
+ * Raw base service class before mixin wrapping.
+ *
+ * Provides core CRUD operations and delegates to repository layer. This class
+ * is wrapped by mixins before export (see bottom of file).
+ *
+ * **Key Responsibilities:**
+ * - Normalize inputs (Entity → POJO) before passing to repository
+ * - Provide consistent CRUD interface
+ * - Handle graph queries (eager loading)
+ * - Support pagination (offset-based, cursor pending)
+ * - Transaction passthrough
+ *
+ * **Does NOT Handle** (delegated to mixins/repositories):
+ * - Caching (use withCacheable mixin)
+ * - Observability (use withObservable mixin)
+ * - Access control (use withAccessControl mixin)
+ * - Event emission (use withPluggable mixin)
+ * - Soft deletes (use withSoftDeletable mixin)
+ *
+ * @class RawBaseService
+ * @private
+ */
 class RawBaseService  {
     /**
      * Create a service instance.
@@ -452,6 +546,57 @@ class RawBaseService  {
     }
 }
 
+/**
+ * Export BaseService with observability mixin applied.
+ *
+ * This demonstrates the mixin composition pattern. RawBaseService provides
+ * core CRUD operations, while withObservable wraps it to add automatic:
+ * - Timing (operation duration tracking)
+ * - Logging (structured logs for all operations)
+ * - Metrics (success/failure counts, duration stats)
+ * - Event emission (observability.service events)
+ *
+ * **How Mixins Work:**
+ * withObservable() is a higher-order function that:
+ * 1. Takes a service class (RawBaseService)
+ * 2. Returns a new class that extends it
+ * 3. Wraps key methods (getById, create, update, etc.)
+ * 4. Adds pre/post hooks for timing and logging
+ * 5. Emits events for monitoring
+ *
+ * **What This Means for Your Code:**
+ * ```javascript
+ * const iconService = new IconService();
+ * const icon = await iconService.getById(123);
+ *
+ * // Automatically logged:
+ * // "icon-service.getById success 45ms { id: 123 }"
+ *
+ * // Automatically emitted:
+ * // Event: observability.service
+ * //   { service: 'icon', operation: 'getById', phase: 'success', durationMs: 45 }
+ *
+ * // Automatically tracked:
+ * // Metric: operation_duration_ms=45 operation=getById service=icon result=success
+ * ```
+ *
+ * **In Production:**
+ * The full composition would include more mixins:
+ * ```javascript
+ * const BaseService =
+ *   withObservable(
+ *   withCacheable(
+ *   withPluggable(
+ *   withAccessControl(
+ *   withSoftDeletable(
+ *   withActivatable(
+ *     RawBaseService
+ *   ))))));
+ * ```
+ *
+ * @type {typeof RawBaseService}
+ * @see {@link withObservable} For observability mixin documentation
+ */
 const BaseService = withObservable(RawBaseService);
 
 module.exports = BaseService;

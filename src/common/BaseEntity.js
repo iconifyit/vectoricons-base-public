@@ -1,20 +1,95 @@
 /* eslint-env node */
 
+/**
+ * @fileoverview BaseEntity class and factory for creating immutable entity instances from Objection.js models.
+ *
+ * This module provides the foundation for the Entity layer in our Service-Oriented Architecture.
+ * Entities are immutable, validated data transfer objects that represent domain models.
+ *
+ * **Key Features:**
+ * - Automatic camelCase conversion from snake_case database columns
+ * - Hidden field filtering (e.g., passwords, tokens)
+ * - Allowed column whitelisting for precise control
+ * - Related entity materialization (nested objects/arrays)
+ * - JSON schema derivation from Objection.js models
+ * - Immutable by default (frozen instances)
+ *
+ * **Usage Pattern:**
+ * ```javascript
+ * // Define entity from Objection model
+ * const IconEntity = createEntityFromModel(IconModel, {
+ *   // Extra methods
+ *   isPublished() { return this.isActive && !this.isDeleted; }
+ * }, {
+ *   hiddenFields: ['internalId', 'secretKey'],
+ *   relatedEntities: {
+ *     set: () => SetEntity,
+ *     images: () => ImageEntity
+ *   }
+ * });
+ *
+ * // Use in service layer
+ * const icon = new IconEntity(dbRow);
+ * console.log(icon.svgPath); // camelCase
+ * console.log(icon.secretKey); // undefined (hidden)
+ * Object.isFrozen(icon); // true
+ * ```
+ *
+ * @see {@link https://vincit.github.io/objection.js/ Objection.js Documentation}
+ */
+
 const Inflector = require('inflected');
 
 /**
- * BaseEntity and factory for model-backed entities.
- * Unknown fields are ignored unless declared as related entities.
+ * Base class for all domain entities.
+ *
+ * Provides core functionality for data transfer objects including serialization,
+ * cloning, and hidden field management. All entities in the system extend this class
+ * either directly or via createEntityFromModel factory.
+ *
+ * **Design Philosophy:**
+ * - Entities are immutable value objects
+ * - Entities should not contain business logic (use Services)
+ * - Entities are serializable (toJSON) for API responses
+ * - Entities filter sensitive data automatically
+ *
+ * @class
+ * @example
+ * // Direct usage (rare, usually use createEntityFromModel)
+ * class UserEntity extends BaseEntity {
+ *   static hiddenFields = ['password', 'resetToken'];
+ * }
+ *
+ * const user = new UserEntity({ id: 1, email: 'user@example.com', password: 'secret' });
+ * console.log(user.password); // undefined (filtered by hiddenFields)
  */
 class BaseEntity {
 
     hiddenFields = [];
 
     /**
-     * Construct from arbitrary data, keeping only non-hidden fields.
-     * @param {Object} data
-     * @param {Object} [entityOptions={}]
-     * @param {boolean} [entityOptions.includeHiddenFields=false]
+     * Construct entity instance from arbitrary data, automatically filtering hidden fields.
+     *
+     * Hidden fields (e.g., passwords, tokens) are removed unless explicitly requested
+     * via entityOptions.includeHiddenFields = true. This ensures sensitive data is not
+     * accidentally exposed in API responses.
+     *
+     * @param {Object} data - Raw data object (typically from database or API)
+     * @param {Object} [entityOptions={}] - Entity construction options
+     * @param {boolean} [entityOptions.includeHiddenFields=false] - If true, retain hidden fields
+     *
+     * @example
+     * // Without hidden fields (default)
+     * const user = new UserEntity({ id: 1, email: 'user@example.com', password: 'secret' });
+     * console.log(user.password); // undefined
+     *
+     * @example
+     * // With hidden fields (for internal operations)
+     * const user = new UserEntity(
+     *   { id: 1, email: 'user@example.com', password: 'secret' },
+     *   { includeHiddenFields: true }
+     * );
+     * console.log(user.password); // 'secret'
      */
     constructor(data = {}, entityOptions = {}) {
         if (!data || typeof data !== 'object') {
@@ -37,17 +112,58 @@ class BaseEntity {
     }
 
     /**
-     * Create a new instance copying current data and applying updates.
-     * @param {Object} updates
-     * @returns {this}
+     * Create a new entity instance by cloning current data and applying updates.
+     *
+     * Since entities are immutable (frozen), this method provides a way to create
+     * a modified version without mutating the original. Useful for applying partial
+     * updates while preserving immutability.
+     *
+     * @param {Object} updates - Fields to add/override in the cloned instance
+     * @returns {this} New entity instance with updates applied
+     *
+     * @example
+     * const icon1 = new IconEntity({ id: 1, name: 'home', isActive: true });
+     * const icon2 = icon1.cloneWith({ name: 'home-alt' });
+     *
+     * console.log(icon1.name); // 'home' (unchanged)
+     * console.log(icon2.name); // 'home-alt'
+     * console.log(icon2.id);   // 1 (copied from original)
+     * console.log(icon1 !== icon2); // true (different instances)
      */
     cloneWith(updates = {}) {
         return new this.constructor({ ...this, ...updates });
     }
 
     /**
-     * Serialize to plain JSON, recursing into nested entities.
-     * @returns {Object}
+     * Serialize entity to plain JSON object, recursively converting nested entities.
+     *
+     * This method is automatically called by JSON.stringify() and ensures all nested
+     * entities (arrays or single objects) are also serialized properly. Essential for
+     * API responses where entities need to be converted to plain JSON.
+     *
+     * @returns {Object} Plain JavaScript object suitable for JSON serialization
+     *
+     * @example
+     * const icon = new IconEntity({
+     *   id: 1,
+     *   name: 'home',
+     *   set: new SetEntity({ id: 10, name: 'Material' }),
+     *   images: [
+     *     new ImageEntity({ id: 100, url: '/img1.png' }),
+     *     new ImageEntity({ id: 101, url: '/img2.png' })
+     *   ]
+     * });
+     *
+     * const json = icon.toJSON();
+     * // All nested entities converted to plain objects
+     * console.log(json.set.name); // 'Material'
+     * console.log(json.images[0].url); // '/img1.png'
+     *
+     * @example
+     * // Automatic usage with JSON.stringify
+     * const icon = new IconEntity({ id: 1, name: 'home' });
+     * const str = JSON.stringify(icon);
+     * console.log(str); // '{"id":1,"name":"home"}'
      */
     toJSON() {
         const json = {};
@@ -75,22 +191,77 @@ class BaseEntity {
 }
 
 /**
- * Factory to create an entity class from an Objection.js model.
+ * Factory function to create an immutable Entity class from an Objection.js Model.
  *
- * Unknown fields are ignored. Related entity fields are materialized only if
- * declared in `relatedEntities`. Everything else is dropped.
+ * This is the primary way to define entities in the system. It automatically:
+ * - Converts snake_case database columns to camelCase entity properties
+ * - Derives a JSON schema from the Model's jsonSchema
+ * - Filters hidden fields (passwords, tokens, etc.)
+ * - Materializes related entities (lazy-loaded to avoid circular dependencies)
+ * - Freezes instances for immutability
+ * - Validates data against the derived schema
  *
- * Also derives a static JSON schema (camelCase keys) at class creation time,
- * based on the ModelClass.jsonSchema, with hiddenFields removed.
+ * **Why This Pattern?**
+ * - **Separation of Concerns**: Database models (Objection) vs. domain entities (business logic)
+ * - **Immutability**: Frozen entities prevent accidental mutations
+ * - **Type Safety**: JSON schema provides runtime validation
+ * - **Security**: Hidden fields prevent sensitive data leakage
+ * - **Flexibility**: Related entities can be included/excluded dynamically
  *
- * @param {Object} ModelClass
- * @param {Object} [extraMethods={}]
- * @param {Object} [options={}]
- * @param {Array<string>} [options.hiddenFields=[]]
- * @param {Array<string>} [options.allowedColumns=[]]  // explicit allowlist (camel or snake)
- * @param {Object<string,Function>} [options.relatedEntities={}] functions returning Entity classes
- * @param {boolean} [options.freeze=true]  // freeze instances by default
- * @returns {Function} Entity class
+ * @param {Object} ModelClass - Objection.js Model class with jsonSchema
+ * @param {Object} [extraMethods={}] - Additional methods to add to entity instances
+ * @param {Object} [options={}] - Entity configuration options
+ * @param {Array<string>} [options.hiddenFields=[]] - Fields to hide (e.g., ['password', 'resetToken'])
+ * @param {Array<string>} [options.allowedColumns=[]] - If provided, only these fields are included (whitelist)
+ * @param {Object<string,Function>} [options.relatedEntities={}] - Related entity loaders (lazy functions)
+ * @param {boolean} [options.freeze=true] - Whether to freeze instances (default: true)
+ *
+ * @returns {Function} Entity class extending BaseEntity with derived schema
+ *
+ * @example
+ * // Basic entity
+ * const IconEntity = createEntityFromModel(IconModel, {}, {
+ *   hiddenFields: ['internalId']
+ * });
+ *
+ * const icon = new IconEntity({ id: 1, name: 'home', internal_id: 'secret' });
+ * console.log(icon.name); // 'home' (camelCase)
+ * console.log(icon.internalId); // undefined (hidden)
+ * Object.isFrozen(icon); // true
+ *
+ * @example
+ * // Entity with related entities (lazy-loaded to avoid circular deps)
+ * const IconEntity = createEntityFromModel(IconModel, {
+ *   // Extra methods
+ *   isPublished() {
+ *     return this.isActive && !this.isDeleted;
+ *   }
+ * }, {
+ *   hiddenFields: ['secretKey'],
+ *   relatedEntities: {
+ *     set: () => require('./SetEntity'),      // Lazy load
+ *     images: () => require('./ImageEntity')
+ *   }
+ * });
+ *
+ * const iconData = {
+ *   id: 1,
+ *   name: 'home',
+ *   set: { id: 10, name: 'Material' },
+ *   images: [{ id: 100, url: '/img.png' }]
+ * };
+ *
+ * const icon = new IconEntity(iconData);
+ * console.log(icon.set instanceof SetEntity); // true
+ * console.log(icon.images[0] instanceof ImageEntity); // true
+ * console.log(icon.isPublished()); // true (custom method)
+ *
+ * @example
+ * // Entity with allowedColumns (whitelist)
+ * const PublicIconEntity = createEntityFromModel(IconModel, {}, {
+ *   allowedColumns: ['id', 'name', 'svgPath', 'isActive']
+ *   // Only these fields will be included, all others dropped
+ * });
  */
 const createEntityFromModel = (
     ModelClass,

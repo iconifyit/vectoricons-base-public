@@ -1,21 +1,70 @@
 "use strict";
 
 /**
- * BaseRepository class for managing database operations
- * @class BaseRepository
- * @description This class provides a base for repository classes to interact with the database.
- * It includes methods for CRUD operations, pagination, and entity wrapping.
- * @param {Object} options - Options for the repository
- * @param {Object} options.DB - Database instance (default: require('@vectoricons.net/db'))
- * @param {String} options.modelName - Name of the model in the DB instance
- * @param {Function} options.entityClass - Entity class to wrap results in (optional)
- * @param {Object} options.hooks - Hooks to apply to results (optional)
- * @param {boolean} options.freezeEntities - Freeze returned entities (default: true)
- * @param {boolean} options.deepFreezeEntities - Deep-freeze returned entities (default: true)
- * @throws {Error} - If required parameters are missing or invalid
+ * @fileoverview BaseRepository - Data Access Layer for SOA architecture.
+ *
+ * The Repository layer sits between Services and the Database, providing:
+ * - CRUD operations with consistent patterns
+ * - Entity wrapping (database rows → immutable Entity instances)
+ * - Pagination (offset-based, cursor TBD)
+ * - Query builder access for custom queries
+ * - Transaction support
+ * - Hook system for cross-cutting concerns
+ * - Immutability enforcement (frozen entities)
+ *
+ * **Architecture:**
+ * ```
+ * Service Layer (business logic)
+ *      ↓
+ * Repository Layer (data access) ← YOU ARE HERE
+ *      ↓
+ * Objection.js ORM (query building)
+ *      ↓
+ * PostgreSQL Database
+ * ```
+ *
+ * **Design Pattern:**
+ * All repositories extend BaseRepository and provide domain-specific queries:
+ *
+ * ```javascript
+ * class IconRepository extends BaseRepository {
+ *   constructor(opts = {}) {
+ *     super({
+ *       modelName: 'IconModel',
+ *       entityClass: IconEntity,
+ *       ...opts
+ *     });
+ *   }
+ *
+ *   // Custom query methods
+ *   async findBySetId(setId) {
+ *     return this.model.query().where('set_id', setId);
+ *   }
+ * }
+ * ```
+ *
+ * **Key Features:**
+ * - **Entity Wrapping**: Automatic conversion of DB rows to Entity instances
+ * - **Immutability**: All returned entities are frozen (Object.freeze)
+ * - **Hooks**: afterFind, afterList for post-processing
+ * - **Transactions**: Pass `trx` option to any method
+ * - **Related Data**: withRelations() for eager loading
+ *
+ * @see {@link BaseEntity} For entity layer documentation
+ * @see {@link BaseService} For service layer documentation
  */
 
-// ---- immutability utilities ----
+/**
+ * Recursively freeze an object and all nested objects/arrays.
+ *
+ * Prevents accidental mutations of entities after retrieval from database.
+ * Uses WeakSet to handle circular references safely.
+ *
+ * @private
+ * @param {*} value - Value to freeze (object, array, or primitive)
+ * @param {WeakSet} [seen=new WeakSet()] - Tracks visited objects to avoid infinite loops
+ * @returns {*} Frozen value
+ */
 const deepFreeze = (value, seen = new WeakSet()) => {
     if (value == null || typeof value !== 'object' || seen.has(value)) return value;
 
@@ -33,7 +82,92 @@ const deepFreeze = (value, seen = new WeakSet()) => {
     return Object.freeze(value);
 };
 
+/**
+ * Base repository class providing data access patterns for all domain repositories.
+ *
+ * Handles the translation between database rows (via Objection.js) and immutable
+ * Entity instances. All domain repositories (IconRepository, UserRepository, etc.)
+ * extend this class and inherit these CRUD operations.
+ *
+ * **Responsibilities:**
+ * - Execute database queries via Objection.js models
+ * - Convert query results to Entity instances
+ * - Enforce immutability (freeze entities)
+ * - Support transactions
+ * - Provide consistent CRUD interface
+ *
+ * **Does NOT:**
+ * - Contain business logic (use Services)
+ * - Handle caching (use Services with CacheableService mixin)
+ * - Emit events (use Services)
+ * - Enforce access control (use Services with AccessControl)
+ *
+ * @class BaseRepository
+ *
+ * @example
+ * // Define domain repository
+ * class IconRepository extends BaseRepository {
+ *   constructor(opts = {}) {
+ *     super({
+ *       modelName: 'IconModel',
+ *       entityClass: IconEntity,
+ *       hooks: {
+ *         afterFind: async (icon) => {
+ *           // Post-process icon if needed
+ *           return icon;
+ *         }
+ *       },
+ *       ...opts
+ *     });
+ *   }
+ *
+ *   // Custom query
+ *   async findActiveBySetId(setId) {
+ *     const rows = await this.model.query()
+ *       .where({ set_id: setId, is_active: true })
+ *       .orderBy('name');
+ *     return this.wrapEntity(rows, this.entityClass);
+ *   }
+ * }
+ *
+ * @example
+ * // Use in service
+ * const repository = new IconRepository();
+ * const icon = await repository.findById(123);
+ * console.log(icon instanceof IconEntity); // true
+ * console.log(Object.isFrozen(icon)); // true
+ */
 class BaseRepository {
+    /**
+     * Construct repository with model and entity bindings.
+     *
+     * @param {Object} options - Repository configuration
+     * @param {Object} [options.DB] - Database instance (default: require('@vectoricons.net/db'))
+     * @param {string} options.modelName - Name of Objection model in DB instance (e.g., 'IconModel')
+     * @param {Function} options.entityClass - Entity class to wrap results (e.g., IconEntity)
+     * @param {Object} [options.hooks={}] - Lifecycle hooks (afterFind, afterList)
+     * @param {Function} [options.hooks.afterFind] - Called after findById/findOne
+     * @param {Function} [options.hooks.afterList] - Called after findAll/paginate
+     * @param {boolean} [options.freezeEntities=true] - Whether to freeze returned entities
+     * @param {boolean} [options.deepFreezeEntities=true] - Whether to deep-freeze (recursive)
+     *
+     * @throws {Error} If DB instance is missing
+     * @throws {Error} If modelName is missing
+     * @throws {Error} If model doesn't exist in DB instance
+     * @throws {Error} If entityClass is missing
+     *
+     * @example
+     * const repo = new IconRepository({
+     *   modelName: 'IconModel',
+     *   entityClass: IconEntity,
+     *   hooks: {
+     *     afterList: async (icons) => {
+     *       console.log(`Loaded ${icons.length} icons`);
+     *       return icons;
+     *     }
+     *   }
+     * });
+     */
     constructor({
         DB = require('@vectoricons.net/db'),
         modelName,
@@ -107,13 +241,34 @@ class BaseRepository {
     }
 
     /**
-     * Wraps the result in an entity class if provided.
-     * Supports nested entity wrapping via the Entity factory (createEntityFromModel).
+     * Convert database rows to Entity instances.
      *
-     * @param {Object|Array} result
-     * @param {Function} entityClass
-     * @param {Object} [entityOptions={}]
-     * @returns {Object|Array}
+     * This is the core method that transforms plain database objects (from Objection.js)
+     * into immutable, frozen Entity instances. Handles both single objects and arrays.
+     *
+     * **Entity Wrapping Process:**
+     * 1. Convert Objection model instance to plain object (via toJSON if available)
+     * 2. Pass to Entity constructor
+     * 3. Entity filters hidden fields, materializes relations
+     * 4. Returns frozen, immutable Entity instance
+     *
+     * @param {Object|Array<Object>} result - Database row(s) from Objection query
+     * @param {Function} entityClass - Entity class to instantiate (e.g., IconEntity)
+     * @param {Object} [entityOptions={}] - Options passed to Entity constructor
+     * @param {boolean} [entityOptions.includeHiddenFields] - Include hidden fields
+     * @returns {Object|Array<Object>} Entity instance(s)
+     *
+     * @example
+     * // Single entity
+     * const row = await IconModel.query().findById(1);
+     * const icon = this.wrapEntity(row, IconEntity);
+     * console.log(icon instanceof IconEntity); // true
+     *
+     * @example
+     * // Array of entities
+     * const rows = await IconModel.query().where({ is_active: true });
+     * const icons = this.wrapEntity(rows, IconEntity);
+     * console.log(icons[0] instanceof IconEntity); // true
      */
     wrapEntity(result, entityClass, entityOptions = {}) {
         if (!entityClass) return result;
@@ -174,7 +329,37 @@ class BaseRepository {
     }
 
     /**
-     * Paginates results
+     * Paginate query results with offset-based pagination.
+     *
+     * Returns paginated results with metadata (total count, page info). Uses Objection's
+     * .page() method which efficiently counts total rows and fetches the requested page.
+     *
+     * **Note:** Offset pagination doesn't scale well beyond ~100K rows. For large datasets,
+     * consider cursor-based pagination (currently not implemented).
+     *
+     * @param {Object} [where={}] - WHERE clause conditions
+     * @param {number} [page=1] - Page number (1-indexed)
+     * @param {number} [pageSize=10] - Items per page
+     * @param {Object} [options={}] - Query options
+     * @param {Function} [options.entityClass] - Entity class override
+     * @param {Object} [options.entityOptions] - Entity constructor options
+     * @param {Object} [options.trx] - Knex transaction object
+     * @returns {Promise<Object>} Pagination result:
+     *   - results: Array of Entity instances
+     *   - total: Total row count
+     *   - page: Current page (1-indexed)
+     *   - pageSize: Items per page
+     *   - totalPages: Total page count
+     *
+     * @example
+     * const result = await iconRepo.paginate(
+     *   { is_active: true },
+     *   1,  // page
+     *   20  // pageSize
+     * );
+     * console.log(result.results.length); // 20
+     * console.log(result.total); // 150000
+     * console.log(result.totalPages); // 7500
      */
     async paginate(where = {}, page = 1, pageSize = 10, { entityClass = this.entityClass, entityOptions = {}, trx } = {}) {
         const offsetPage = Math.max(page - 1, 0);
