@@ -7,8 +7,10 @@ on:
       - develop
     paths:
       - 'src/**/*.js'
+      - 'package.json'
       - 'documentation.yml'
       - '.github/workflows/docs.yml'
+      - 'docs/index.html'
 
   # Allow manual trigger
   workflow_dispatch:
