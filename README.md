@@ -1,9 +1,6 @@
 # VectorIcons - Icon Marketplace Backend Architecture
 
 > **Portfolio Note:** This is a curated subset of the service-oriented architecture backend for VectorIcons, a multi-vendor marketplace for SVG icons & illustrations, shared for portfolio purposes. It is not runnable as-is due to removed infrastructure dependencies (authentication layers, payment processing, deployment configurations, and proprietary database connections). This repository demonstrates architecture, code quality, testing practices, and systems thinking.
->
-> ## Documentation
-> Full documentation is available [here](https://iconifyit.github.io/vectoricons-base-public)(hosted separately).
 
 ## 📋 Table of Contents
 - [System Overview](#system-overview)
@@ -289,14 +286,14 @@ stateDiagram-v2
 ```mermaid
 flowchart TD
     REQUEST[Access Request<br/>actor, action, resource] --> DENYALL{Has DenyAll<br/>Role?}
-    DENYALL -->|Yes| DENY[Deny Access ❌<br/>Highest Priority]
-    DENYALL -->|No| ADMIN{Has Admin or<br/>SuperAdmin Role?}
+    DENYALL -->|Yes| DENY[Deny Access ❌]
+    DENYALL -->|No| PUBLIC{Is Resource<br/>Public?}
 
-    ADMIN -->|Yes| GRANT[Grant Access ✅]
-    ADMIN -->|No| OWNER{Actor Owns<br/>Resource?}
+    PUBLIC -->|Yes| GRANT[Grant Access ✅]
+    PUBLIC -->|No| PERMISSION{Has Access<br/>Permission?}
 
-    OWNER -->|Yes| GRANT
-    OWNER -->|No| DENY[Deny Access ❌<br/>Default Deny]
+    PERMISSION -->|Yes| GRANT
+    PERMISSION -->|No| DENY[Deny Access ❌]
 
     style DENY fill:#FF6B6B,stroke:#cc5555,color:#fff
     style GRANT fill:#51CF66,stroke:#3fb950,color:#fff
@@ -374,7 +371,7 @@ Reusable modules following Service-Oriented Architecture principles:
 #### Access Control (`src/common/access-control/`)
 **Role-Based Access Control (RBAC)** with hierarchical enforcement:
 
-Priority order: `DenyAll → Admin/SuperAdmin → Resource Ownership → Default Deny`
+Priority order: `DenyAll → Public Resources → Access Permissions → Default Deny`
 
 ```javascript
 const allowed = await accessControl.enforce({
@@ -385,12 +382,13 @@ const allowed = await accessControl.enforce({
 ```
 
 **Features:**
-- Case-insensitive role matching
-- String/number ID coercion for ownership checks
+- Hierarchical permission checking
+- Public resource access
+- Role-based access control
 - Support for custom policy definitions
-- Async enforcement for future policy expansion
+- Async enforcement for policy expansion
 
-**Tests:** 34 comprehensive tests covering role hierarchy and edge cases
+**Tests:** 34 comprehensive tests covering permission hierarchy and edge cases
 
 ---
 
