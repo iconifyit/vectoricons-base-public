@@ -18,7 +18,7 @@
     "test:integration": "jest --selectProjects integration --verbose --noStackTrace --runInBand",
     "test:coverage": "jest --coverage --noStackTrace --runInBand",
     "test:watch": "jest --watch",
-    "docs:generate": "documentation build 'src/common/access-control/**/*.js' 'src/common/cache/**/*.js' 'src/common/event-bus/**/*.js' -f html -o docs --config documentation.yml --shallow",
+    "docs:generate": "documentation build 'src/common/access-control/**/*.js' 'src/common/cache/**/*.js' 'src/common/event-bus/**/*.js' -f html -o docs --shallow --project-name 'VectorIcons Backend' --project-version 1.0.0",
     "docs:serve": "documentation serve 'src/common/access-control/**/*.js' 'src/common/cache/**/*.js' 'src/common/event-bus/**/*.js' --watch"
   },
   "dependencies": {
