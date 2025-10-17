@@ -5,7 +5,6 @@ const DB = require('@vectoricons.net/db');
 /**
  * Represents a style item in the system.
  * Extends BaseEntity to include common entity functionality.
- * @see {@link ../../../refs/db-models/styles.js} Objection.js model for styles
  */
 class StyleEntity extends createEntityFromModel(DB.styles, {}, {
     allowedColumns: [

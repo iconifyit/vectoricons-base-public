@@ -7,7 +7,6 @@ const PaymentTypeRepository = require('./PaymentTypeRepository');
 /**
  * Service class for managing payment types.
  * Extends BaseService to include common service functionality.
- * @see {@link ../../../refs/db-models/payment-types.js} Objection.js model for payment-types
  */
 class PaymentTypeService extends BaseService {
     constructor({ 

@@ -5,7 +5,6 @@ const DB = require('@vectoricons.net/db');
 /**
  * Represents a cart item in the system.
  * Extends BaseEntity to include common entity functionality.
- * @see {@link ../../../refs/db-models/carts.js} Objection.js model for carts
  */
 class CartEntity extends createEntityFromModel(DB.carts, {}, {
     allowedColumns: [

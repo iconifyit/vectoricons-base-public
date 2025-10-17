@@ -3,7 +3,6 @@ const DB = require('@vectoricons.net/db');
 
 /**
  * Represents an image entity in the system.
- * @see {@link ../../../refs/db-models/images.js}
  */
 class ImageTypeEntity extends createEntityFromModel(DB.imageTypes, {}, {
     allowedColumns: [

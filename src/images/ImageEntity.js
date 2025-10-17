@@ -5,7 +5,6 @@ const DB = require('@vectoricons.net/db');
 /**
  * Represents an image item in the system.
  * Extends BaseEntity to include common entity functionality.
- * @see {@link ../../../refs/db-models/images.js} Objection.js model for images
  */
 class ImageEntity extends createEntityFromModel(DB.images, {}, {
     allowedColumns: [

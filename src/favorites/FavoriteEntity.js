@@ -4,7 +4,6 @@ const DB = require('@vectoricons.net/db');
 /**
  * Represents a favorite item in the system.
  * Extends BaseEntity to include common entity functionality.
- * @see {@link ../../../refs/db-models/favorites.js} Objection.js model for favorites
  */
 class FavoriteEntity extends createEntityFromModel(DB.favorites, {}, {
     allowedColumns: [

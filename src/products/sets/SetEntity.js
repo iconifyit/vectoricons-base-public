@@ -5,7 +5,6 @@ const DB = require('@vectoricons.net/db');
 /**
  * Represents a Set item in the system.
  * Extends BaseEntity to include common entity functionality.
- * @see {@link ../../../refs/db-models/sets.js} Objection.js model for sets
  */
 class SetEntity extends createEntityFromModel(DB.sets, {}, {
     allowedColumns: [

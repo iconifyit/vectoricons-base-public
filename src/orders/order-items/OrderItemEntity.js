@@ -5,7 +5,6 @@ const DB = require('@vectoricons.net/db');
 /**
  * Represents an order item in the system.
  * Extends BaseEntity to include common entity functionality.
- * @see {@link ../../../refs/db-models/order-items.js} Objection.js model for order items
  */
 class OrderItemEntity extends createEntityFromModel(DB.orderItems, {}, {
     allowedColumns: [

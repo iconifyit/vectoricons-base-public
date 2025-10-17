@@ -5,7 +5,6 @@ const DB = require('@vectoricons.net/db');
 /**
  * Represents a category item in the system.
  * Extends BaseEntity to include common entity functionality.
- * @see {@link ../../../refs/db-models/categories.js} Objection.js model for categories
  */
 class CategoryEntity extends createEntityFromModel(DB.categories, {}, {
     allowedColumns: [

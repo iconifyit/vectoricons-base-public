@@ -5,7 +5,6 @@ const DB = require('@vectoricons.net/db');
 /**
  * Represents a Family item in the system.
  * Extends BaseEntity to include common entity functionality.
- * @see {@link ../../../refs/db-models/families.js} Objection.js model for licenses
  */
 class FamilyEntity extends createEntityFromModel(DB.families, {}, {
     allowedColumns: [

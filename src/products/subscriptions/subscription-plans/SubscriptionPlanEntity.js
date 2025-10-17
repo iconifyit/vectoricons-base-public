@@ -5,7 +5,6 @@ const DB = require('@vectoricons.net/db');
 /**
  * Represents a subscription-plan item in the system.
  * Extends BaseEntity to include common entity functionality.
- * @see {@link ../../../refs/db-models/subscription-plans.js} Objection.js model for subscription-plans
  */
 class SubscriptionPlanEntity extends createEntityFromModel(DB.subscriptionPlans, {}, {
     allowedColumns: [

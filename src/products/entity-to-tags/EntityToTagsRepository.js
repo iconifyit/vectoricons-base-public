@@ -6,7 +6,6 @@ const EntityToTagsEntity = require('./EntityToTagsEntity');
 /**
  * Provides DB operations for tags.
  * Extends BaseRepository to include common repository functionality.
- * @see {@link ../../../refs/db-models/tags.js} Objection.js model for entity-to-tags
  * @extends BaseRepository
  */
 class EntityToTagsRepository extends BaseRepository {

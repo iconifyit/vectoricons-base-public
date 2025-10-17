@@ -5,7 +5,6 @@ const DB = require('@vectoricons.net/db');
 /**
  * Represents a transaction entity in the system.
  * Extends BaseEntity to include common entity functionality.
- * @see {@link ../../../refs/db-models/transaction-items.js} Objection.js model for transaction-items
  */
 class TransactionEntity extends createEntityFromModel(DB.transactions, {}, {
     allowedColumns: [
