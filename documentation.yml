@@ -1,0 +1,53 @@
+toc:
+  - name: Getting Started
+    description: |
+      VectorIcons Backend API Documentation
+
+      This documentation covers the core architecture and services of the VectorIcons
+      icon marketplace backend. The system implements a Service-Oriented Architecture (SOA)
+      with event-driven patterns for scalability and maintainability.
+
+  - name: Architecture Overview
+    description: |
+      **Layered Architecture:**
+      - REST API Layer (Fastify)
+      - SOA Service Layer (Services, Repositories, Entities)
+      - Infrastructure Layer (Cache, Events, Access Control)
+      - Data Layer (PostgreSQL, Redis)
+
+      **Key Patterns:**
+      - Entity/Repository/Service pattern for data access
+      - Event-driven pub/sub for module communication
+      - Adapter pattern for swappable cache/event backends
+      - Role-Based Access Control (RBAC)
+
+  - name: Common Infrastructure
+    description: Core infrastructure services used across all modules
+
+  - name: Domain Services
+    description: Business domain services and data models
+
+theme:
+  name: default
+
+projectName: VectorIcons Backend
+projectHomepage: https://github.com/yourusername/vectoricons-portfolio
+projectVersion: 1.0.0
+
+markdownToc: true
+sortOrder: alpha
+
+infer:
+  - kind: class
+  - kind: function
+  - kind: typedef
+  - kind: event
+
+access:
+  - public
+  - protected
+  - private
+
+inferPrivate: true
+
+github: true
