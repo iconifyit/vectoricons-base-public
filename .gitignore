@@ -42,3 +42,8 @@ out/
 tmp/
 temp/
 *.tmp
+
+scratch/
+scratch-*
+scratch*
+scratch.*
