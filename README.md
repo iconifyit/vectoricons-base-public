@@ -1,6 +1,9 @@
 # VectorIcons - Icon Marketplace Backend Architecture
 
 > **Portfolio Note:** This is a curated subset of the service-oriented architecture backend for VectorIcons, a multi-vendor marketplace for SVG icons & illustrations, shared for portfolio purposes. It is not runnable as-is due to removed infrastructure dependencies (authentication layers, payment processing, deployment configurations, and proprietary database connections). This repository demonstrates architecture, code quality, testing practices, and systems thinking.
+>
+> ## Documentation
+> Full documentation is available [here](https://iconifyit.github.io/vectoricons-base-public)(hosted separately).
 
 ## 📋 Table of Contents
 - [System Overview](#system-overview)
