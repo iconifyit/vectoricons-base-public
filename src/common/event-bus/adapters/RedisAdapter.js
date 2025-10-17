@@ -1,8 +1,16 @@
+/**
+ * @module Event System
+ * @fileoverview RedisEventBusAdapter - Redis pub/sub adapter for distributed event bus.
+ *
+ * Enables event distribution across multiple server instances using Redis pub/sub.
+ * Suitable for multi-server production environments requiring event synchronization.
+ *
+ * NOTE: This is a simple channel-per-event approach. For large scale you'd
+ * want serialization, backpressure, and graceful reconnection handling.
+ */
+
 // Example Redis adapter (pub/sub). Requires a Redis client (e.g., ioredis).
-// You can flesh this out when you’re ready to use Redis in prod.
-//
-// NOTE: This is a simple channel-per-event approach. For large scale you’d
-// want serialization, backpressure, and graceful reconnection handling.
+// You can flesh this out when you're ready to use Redis in prod.
 
 const BaseEventBusAdapter = require('./BaseEventBusAdapter.js');
 

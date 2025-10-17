@@ -1,6 +1,14 @@
 const mitt = require('mitt');
 const BaseEventBusAdapter = require('./BaseEventBusAdapter.js');
 
+/**
+ * @module Event System
+ * @fileoverview MemoryEventBusAdapter - In-memory event bus adapter for single-instance deployments.
+ *
+ * Uses mitt library for efficient in-process event emitting. Suitable for development,
+ * testing, and single-server production environments.
+ */
+
 class MemoryEventBusAdapter extends BaseEventBusAdapter {
     constructor() {
         super();

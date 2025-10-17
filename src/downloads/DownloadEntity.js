@@ -3,8 +3,8 @@ const { createEntityFromModel } = require('../common/BaseEntity');
 const DB = require('@vectoricons.net/db');
 
 /**
- * Represents a download item in the system.
- * Extends BaseEntity to include common entity functionality.
+ * @module Downloads Domain
+ * @fileoverview DownloadEntity - Immutable download representation.
  */
 class DownloadEntity extends createEntityFromModel(DB.downloads, {}, {
     allowedColumns: [

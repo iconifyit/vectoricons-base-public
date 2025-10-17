@@ -7,8 +7,8 @@ const { withPluggableCacheableAndSoftDeletable } = require('../../common/mixins/
 const { withActivatable } = require('../../common/mixins/service');
 
 /**
- * IllustrationService
- * Composes BaseService with Observability + (Pluggable + Cacheable + SoftDelete + Activatable) mixins.
+ * @module Products Domain
+ * @fileoverview IllustrationService - Composes BaseService with Observability + (Pluggable + Cacheable + SoftDelete + Activatable) mixins.
  */
 class IllustrationService extends withActivatable(withPluggableCacheableAndSoftDeletable(BaseService)) {
     constructor({ repository = new IllustrationRepository({ DB }), entityClass = IllustrationEntity } = {}) {

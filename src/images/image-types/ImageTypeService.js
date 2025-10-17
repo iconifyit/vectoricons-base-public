@@ -5,8 +5,8 @@ const BaseService = require('../../common/BaseService');
 const DB = require('@vectoricons.net/db');
 
 /**
- * Service for managing image types.
- * @extends BaseService
+ * @module Images Domain
+ * @fileoverview ImageTypeService - Service for managing image types.
  */
 class ImageTypeService extends BaseService {
     constructor({ repository, entityClass } = {}) {

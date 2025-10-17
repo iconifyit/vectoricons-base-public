@@ -2,6 +2,10 @@ const DB = require('@vectoricons.net/db');
 const BaseRepository = require('../../common/BaseRepository');
 const IllustrationEntity = require('./IllustrationEntity');
 
+/**
+ * @module Products Domain
+ * @fileoverview IllustrationRepository - Provides DB operations for illustrations.
+ */
 class IllustrationRepository extends BaseRepository {
     constructor({ DB }) {
         super({

@@ -5,9 +5,9 @@ const BaseRepository = require('../../common/BaseRepository');
 const PaymentTypeEntity = require('./PaymentTypeEntity');
 
 /**
- * PaymentTypeRepository class
+ * @module Transactions Domain
+ * @fileoverview PaymentTypeRepository - Manages payment types data.
  * @class PaymentTypeRepository
- * @description This class is responsible for managing payment types data.
  */
 class PaymentTypeRepository extends BaseRepository {
     constructor({ DB }) {

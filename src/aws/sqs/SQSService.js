@@ -1,6 +1,14 @@
 const AWS = require('aws-sdk');
 AWS.config.update({ region: process.env.AWS_REGION || 'us-east-1' });
 
+/**
+ * @module AWS Integration
+ * @fileoverview SQSService - AWS Simple Queue Service integration for message queuing.
+ *
+ * SQSService provides methods to interact with AWS SQS for sending, receiving,
+ * and managing messages in distributed queues.
+ */
+
 // const s3 = new AWS.S3({ region: 'us-east-1' });
 // const sqs = new AWS.SQS({ apiVersion: '2012-11-05' });
 

@@ -3,8 +3,8 @@ const { createEntityFromModel } = require('../../common/BaseEntity');
 const DB = require('@vectoricons.net/db');
 
 /**
- * Represents a enitity-to-categories item in the system.
- * Extends BaseEntity to include common entity functionality.
+ * @module Products Domain
+ * @fileoverview EntityToCategoriesEntity - Immutable entity-to-categories representation.
  */
 class EntityToCategoriesEntity extends createEntityFromModel(DB.entityToCategories, {}, {
         allowedColumns: [

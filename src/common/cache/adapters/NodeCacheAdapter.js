@@ -1,6 +1,9 @@
 const NodeCache = require('node-cache');
 
 /**
+ * @module Caching Layer
+ * @fileoverview NodeCacheAdapter - In-memory cache adapter for development and testing.
+ *
  * NodeCacheAdapter
  * In-memory cache that stores values as-is (no serialization).
  * Returns hydrated Entity instances by using the provided repository + entityClass

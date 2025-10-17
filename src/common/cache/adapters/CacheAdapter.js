@@ -1,3 +1,10 @@
+/**
+ * @module Caching Layer
+ * @fileoverview CacheAdapter - Abstract base class for cache adapters.
+ *
+ * Defines the adapter interface that all cache implementations must follow.
+ */
+
 // CacheAdapter.js
 class CacheAdapter {
     async get(key)       { throw new Error('Not implemented'); }

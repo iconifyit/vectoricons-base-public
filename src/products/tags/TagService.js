@@ -6,9 +6,9 @@ const TagEntity = require('./TagEntity');
 const { withActivatable } = require('../../common/mixins/service');
 
 /**
+ * @module Products Domain
+ * @fileoverview TagService - Service for managing tags with activation support.
  * @class TagService
- * @description Service for managing tags with activation support.
- * @extends BaseService
  */
 class TagService extends withActivatable(BaseService) {
     constructor({ repository, entityClass } = {}) {

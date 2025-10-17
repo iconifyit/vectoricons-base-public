@@ -4,9 +4,9 @@ const DB = require('@vectoricons.net/db');
 const BaseService = require('../../common/BaseService');
 
 /**
- * CartItemService class
+ * @module Carts Domain
+ * @fileoverview CartItemService - Service for managing cart items data.
  * @class CartItemService
- * @description This class is responsible for managing cart_items data.
  */
 class CartItemService extends BaseService {
     /**

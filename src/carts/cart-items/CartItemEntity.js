@@ -3,8 +3,8 @@ const { createEntityFromModel } = require('../../common/BaseEntity');
 const DB = require('@vectoricons.net/db');
 
 /**
- * Represents a cart item in the system.    
- * Extends BaseEntity to include common entity functionality.
+ * @module Carts Domain
+ * @fileoverview CartItemEntity - Immutable cart item representation.
  */
 class CartItemEntity extends createEntityFromModel(DB.cartItems, {}, {
     allowedColumns: [

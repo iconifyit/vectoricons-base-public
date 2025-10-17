@@ -2,8 +2,8 @@ const { createEntityFromModel } = require('../common/BaseEntity');
 const DB = require('@vectoricons.net/db');
 
 /**
- * Represents a favorite item in the system.
- * Extends BaseEntity to include common entity functionality.
+ * @module Favorites Domain
+ * @fileoverview FavoriteEntity - Immutable favorite representation.
  */
 class FavoriteEntity extends createEntityFromModel(DB.favorites, {}, {
     allowedColumns: [

@@ -3,6 +3,7 @@
 const { UserRoles } = require('../../utils/enums');
 
 /**
+ * @module Access Control
  * @fileoverview AccessControlService - Role-Based Access Control (RBAC) with priority-based enforcement.
  *
  * This service implements a hierarchical RBAC system that evaluates access requests based on

@@ -5,8 +5,8 @@ const PurchasedItemRepository = require('./PurchasedItemRepository');
 const PurchasedItemEntity = require('./PurchasedItemEntity');
 
 /**
- * Service for managing purchasedItems.
- * @extends BaseService
+ * @module Products Domain
+ * @fileoverview PurchasedItemService - Service for managing purchased items.
  */
 class PurchasedItemService extends BaseService {
     constructor({ repository, entityClass } = {}) {

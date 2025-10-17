@@ -3,6 +3,7 @@ const { CacheModes, kCACHE_DEFAULT_TTL } = require('./CacheConstants');
 const utils = require('../../utils');
 
 /**
+ * @module Caching Layer
  * @fileoverview CacheService - Adapter-based caching layer with entity rehydration.
  *
  * This service provides a flexible caching abstraction that supports multiple backends

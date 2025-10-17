@@ -5,8 +5,8 @@ const StyleRepository = require('./StyleRepository');
 const StyleEntity = require('./StyleEntity');
 
 /**
- * Service for managing styles.
- * @extends BaseService
+ * @module Products Domain
+ * @fileoverview StyleService - Service for managing styles.
  */
 class StyleService extends BaseService {
     constructor({ repository, entityClass } = {}) {

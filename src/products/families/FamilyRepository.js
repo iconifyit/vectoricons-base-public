@@ -4,8 +4,8 @@ const BaseRepository = require('../../common/BaseRepository');
 const FamilyEntity = require('./FamilyEntity');
 
 /**
- * Provides DB operations for familys.
- * @extends BaseRepository
+ * @module Products Domain
+ * @fileoverview FamilyRepository - Provides DB operations for families.
  */
 class FamilyRepository extends BaseRepository {
     constructor({ DB }) {

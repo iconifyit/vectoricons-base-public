@@ -1,6 +1,9 @@
 const IORedis = require('ioredis');
 
 /**
+ * @module Caching Layer
+ * @fileoverview RedisCacheAdapter - Redis-based cache adapter for production.
+ *
  * RedisCacheAdapter
  * Stores values as JSON strings in Redis and rehydrates them into Entity instances
  * when reading via `get()` using the provided repository + entityClass context.

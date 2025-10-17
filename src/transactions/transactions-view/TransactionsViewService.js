@@ -5,9 +5,9 @@ const TransactionsViewEntity = require('./TransactionsViewEntity');
 const TransactionsViewRepository = require('./TransactionsViewRepository');
 
 /**
- * TransactionsViewService class
+ * @module Transactions Domain
+ * @fileoverview TransactionsViewService - Service for managing transactions view business logic.
  * @class TransactionsViewService
- * @description This class is responsible for managing transaction items business logic.
  */
 class TransactionsViewService extends BaseService {
     constructor({ 

@@ -6,8 +6,9 @@ const ProductTypeRepository = require('./ProductTypeRepository');
 const { withActivatable } = require('../../common/mixins/service');
 
 /**
+ * @module Products Domain
+ * @fileoverview ProductTypeService - Service for managing product types with activation support.
  * @class ProductTypeService
- * @description This class is responsible for managing product types with activation support.
  */
 class ProductTypeService extends withActivatable(BaseService) {
     constructor({ repository = new ProductTypeRepository({ DB }), entityClass = ProductTypeEntity } = {}) {

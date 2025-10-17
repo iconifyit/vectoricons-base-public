@@ -3,8 +3,8 @@ const { createEntityFromModel } = require('../../common/BaseEntity');
 const DB = require('@vectoricons.net/db');
 
 /**
- * Represents a Family item in the system.
- * Extends BaseEntity to include common entity functionality.
+ * @module Products Domain
+ * @fileoverview FamilyEntity - Immutable family representation.
  */
 class FamilyEntity extends createEntityFromModel(DB.families, {}, {
     allowedColumns: [

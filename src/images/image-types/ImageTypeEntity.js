@@ -2,7 +2,8 @@ const { createEntityFromModel } = require('../../common/BaseEntity');
 const DB = require('@vectoricons.net/db');
 
 /**
- * Represents image type metadata in the system.
+ * @module Images Domain
+ * @fileoverview ImageTypeEntity - Immutable image type representation.
  */
 class ImageTypeEntity extends createEntityFromModel(DB.imageTypes, {}, {
     allowedColumns: [

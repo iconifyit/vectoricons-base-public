@@ -3,8 +3,8 @@ const BaseRepository = require('../common/BaseRepository');
 const OrderEntity = require('./OrderEntity');
 
 /**
- * Provides DB operations for orders.
- * @extends BaseRepository
+ * @module Orders Domain
+ * @fileoverview OrderRepository - Provides DB operations for orders.
  */
 class OrderRepository extends BaseRepository {
     constructor({ DB }) {

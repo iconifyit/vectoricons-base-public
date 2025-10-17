@@ -6,9 +6,9 @@ const CategoryEntity = require('./CategoryEntity');
 const { withActivatable } = require('../../common/mixins/service');
 
 /**
+ * @module Products Domain
+ * @fileoverview CategoryService - Service for managing categories with activation support.
  * @class CategoryService
- * @description Service for managing categories with activation support.
- * @extends BaseService
  */
 class CategoryService extends withActivatable(BaseService) {
     constructor({ repository, entityClass } = {}) {

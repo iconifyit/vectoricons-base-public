@@ -3,8 +3,8 @@ const { createEntityFromModel } = require('../common/BaseEntity');
 const DB = require('@vectoricons.net/db');
 
 /**
- * Represents an image item in the system.
- * Extends BaseEntity to include common entity functionality.
+ * @module Images Domain
+ * @fileoverview ImageEntity - Immutable image representation.
  */
 class ImageEntity extends createEntityFromModel(DB.images, {}, {
     allowedColumns: [

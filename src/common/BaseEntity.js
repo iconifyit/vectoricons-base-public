@@ -1,6 +1,7 @@
 /* eslint-env node */
 
 /**
+ * @module Core Infrastructure
  * @fileoverview BaseEntity class and factory for creating immutable entity instances from Objection.js models.
  *
  * This module provides the foundation for the Entity layer in our Service-Oriented Architecture.

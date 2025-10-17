@@ -1,6 +1,7 @@
 "use strict";
 
 /**
+ * @module Core Infrastructure
  * @fileoverview BaseRepository - Data Access Layer for SOA architecture.
  *
  * The Repository layer sits between Services and the Database, providing:

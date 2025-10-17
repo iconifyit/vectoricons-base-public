@@ -4,8 +4,8 @@ const BaseRepository = require('../../common/BaseRepository');
 const PurchasedItemEntity = require('./PurchasedItemEntity');
 
 /**
- * Provides DB operations for purchasedItems.
- * @extends BaseRepository
+ * @module Products Domain
+ * @fileoverview PurchasedItemRepository - Provides DB operations for purchased items.
  */
 class PurchasedItemRepository extends BaseRepository {
     constructor({ DB }) {

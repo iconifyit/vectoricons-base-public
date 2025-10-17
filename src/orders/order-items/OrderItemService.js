@@ -5,8 +5,8 @@ const BaseService = require('../../common/BaseService');
 const DB = require('@vectoricons.net/db');
 
 /**
- * Service for managing order items.
- * Provides functionality for creating, retrieving, updating, and deleting order items.
+ * @module Orders Domain
+ * @fileoverview OrderItemService - Service for managing order items.
  */
 class OrderItemService extends BaseService {
     constructor({ repository, entityClass } = {}) {

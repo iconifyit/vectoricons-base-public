@@ -5,10 +5,9 @@ const DB            = require('@vectoricons.net/db');
 const { withSoftDeletable, withActivatable } = require('../../common/mixins/service');
 
 /**
- * SetService class
+ * @module Products Domain
+ * @fileoverview SetService - Service for managing set data with soft delete and activation support.
  * @class SetService
- * @description This class is responsible for managing set data.
- * It provides methods to interact with the SetRepository and perform operations on SetEntity.
  */
 class SetService extends withSoftDeletable(withActivatable(BaseService)) {
     constructor({ repository, entityClass } = {}) {

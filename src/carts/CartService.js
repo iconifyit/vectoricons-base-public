@@ -5,9 +5,9 @@ const CartEntity = require('./CartEntity');
 const CartRepository = require('./CartRepository');
 
 /**
- * CartService class
+ * @module Carts Domain
+ * @fileoverview CartService - Service for managing carts data.
  * @class CartService
- * @description This class is responsible for managing cashout_requests data.
  */
 class CartService extends BaseService {
     constructor({ repository = new CartRepository({ DB}), entityClass = CartEntity } = {}) {

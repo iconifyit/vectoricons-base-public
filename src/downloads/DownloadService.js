@@ -5,9 +5,9 @@ const DownloadsEntity     = require('./DownloadEntity');
 const DownloadsRepository = require('./DownloadRepository');
 
 /**
- * DownloadService class
+ * @module Downloads Domain
+ * @fileoverview DownloadService - Service for managing downloads data.
  * @class DownloadService
- * @description This class is responsible for managing downloads data.
  */
 class DownloadService extends BaseService {
     constructor({

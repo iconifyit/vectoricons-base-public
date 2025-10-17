@@ -1,8 +1,8 @@
 
 /**
- * SubscriptionPlanService class
+ * @module Products Domain
+ * @fileoverview SubscriptionPlanService - Service for managing subscription_plans data.
  * @class SubscriptionPlanService
- * @description This class is responsible for managing subscription_plans data.
  */
 
 const DB = require('@vectoricons.net/db');

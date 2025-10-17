@@ -3,8 +3,8 @@ const { createEntityFromModel } = require('../../common/BaseEntity');
 const DB = require('@vectoricons.net/db');
 
 /**
- * Represents a product-type item in the system.
- * Extends BaseEntity to include common entity functionality.
+ * @module Products Domain
+ * @fileoverview ProductTypeEntity - Immutable product-type representation.
  */
 class ProductTypeEntity extends createEntityFromModel(DB.productTypes, {}, {
     allowedColumns: [

@@ -1,6 +1,10 @@
 const ImageEntity      = require('../ImageEntity');
 const ImageRepository  = require('../ImageRepository');
 
+/**
+ * @module Images Domain
+ * @fileoverview PreviewService - Service for managing preview images.
+ */
 class PreviewService {
     constructor({ imageRepository }) {
         if (!imageRepository) {

@@ -4,9 +4,9 @@ const BaseRepository = require('../../common/BaseRepository');
 const TransactionsViewEntity = require('./TransactionsViewEntity');
 
 /**
- * TransactionsViewRepository class
+ * @module Transactions Domain
+ * @fileoverview TransactionsViewRepository - Manages transactions view data.
  * @class TransactionsViewRepository
- * @description This class is responsible for managing transaction items data.
  */
 class TransactionsViewRepository extends BaseRepository {
     constructor({ DB }) {

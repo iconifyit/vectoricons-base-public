@@ -2,6 +2,10 @@ const BaseRepository = require('../../common/BaseRepository');
 const { Sets }       = require('@vectoricons.net/db');
 const SetEntity      = require('./SetEntity');
 
+/**
+ * @module Products Domain
+ * @fileoverview SetRepository - Provides DB operations for sets.
+ */
 class SetRepository extends BaseRepository {
     constructor({ DB }) {
         super({

@@ -4,9 +4,9 @@ const FavoriteEntity = require('./FavoriteEntity');
 const DB = require('@vectoricons.net/db');
 
 /**
- * FavoriteService class
+ * @module Favorites Domain
+ * @fileoverview FavoriteService - Service for managing favorites business logic.
  * @class FavoriteService
- * @description This class orchestrates favorite item business logic.
  */
 class FavoriteService extends BaseService {
     constructor({ repository, entityClass } = {}) {

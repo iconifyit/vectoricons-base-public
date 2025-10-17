@@ -4,8 +4,8 @@ const BaseRepository = require('../../common/BaseRepository');
 const CategoryEntity = require('./CategoryEntity');
 
 /**
- * Provides DB operations for categories.
- * @extends BaseRepository
+ * @module Products Domain
+ * @fileoverview CategoryRepository - Provides DB operations for categories.
  */
 class CategoryRepository extends BaseRepository {
     constructor({ DB }) {

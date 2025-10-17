@@ -3,9 +3,9 @@ const BaseRepository = require('../common/BaseRepository');
 const FavoriteEntity = require('./FavoriteEntity');
 
 /**
- * FavoriteRepository class
+ * @module Favorites Domain
+ * @fileoverview FavoriteRepository - Manages favorites data.
  * @class FavoriteRepository
- * @description This class is responsible for managing favorites data.
  */
 class FavoriteRepository extends BaseRepository {
     constructor({ DB }) {

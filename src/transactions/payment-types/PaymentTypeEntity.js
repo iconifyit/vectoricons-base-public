@@ -3,8 +3,8 @@ const { createEntityFromModel } = require('../../common/BaseEntity');
 const DB = require('@vectoricons.net/db');
 
 /**
- * Represents a payment-type item in the system.
- * Extends BaseEntity to include common entity functionality.
+ * @module Transactions Domain
+ * @fileoverview PaymentTypeEntity - Immutable payment-type representation.
  */
 class PaymentTypeEntity extends createEntityFromModel(DB.paymentTypes, {}, {
     allowedColumns: [

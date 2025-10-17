@@ -9,9 +9,9 @@ const enums = require('../utils/enums.js');
 
 
 /**
- * TransactionRepository class
+ * @module Transactions Domain
+ * @fileoverview TransactionRepository - Manages transactions data.
  * @class TransactionRepository
- * @description This class is responsible for managing transactions data.
  */
 class TransactionRepository extends BaseRepository {
     /**

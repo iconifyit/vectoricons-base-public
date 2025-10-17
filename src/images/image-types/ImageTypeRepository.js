@@ -4,8 +4,8 @@ const BaseRepository = require('../../common/BaseRepository');
 const ImageTypeEntity = require('./ImageTypeEntity');
 
 /**
- * Provides DB operations for image-types.
- * @extends BaseRepository
+ * @module Images Domain
+ * @fileoverview ImageTypeRepository - Provides DB operations for image-types.
  */
 class ImageTypeRepository extends BaseRepository {
     constructor({ DB }) {

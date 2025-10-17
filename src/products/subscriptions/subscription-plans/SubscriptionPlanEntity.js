@@ -3,8 +3,8 @@ const { createEntityFromModel } = require('../../../common/BaseEntity');
 const DB = require('@vectoricons.net/db');
 
 /**
- * Represents a subscription-plan item in the system.
- * Extends BaseEntity to include common entity functionality.
+ * @module Products Domain
+ * @fileoverview SubscriptionPlanEntity - Immutable subscription-plan representation.
  */
 class SubscriptionPlanEntity extends createEntityFromModel(DB.subscriptionPlans, {}, {
     allowedColumns: [

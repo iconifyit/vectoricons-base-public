@@ -4,9 +4,9 @@ const CartEntity = require('./CartEntity');
 const enums = require('../utils/enums');
 
 /**
- * CartRepository class
+ * @module Carts Domain
+ * @fileoverview CartRepository - Manages carts data.
  * @class CartRepository
- * @description This class is responsible for managing carts data.
  */
 class CartRepository extends BaseRepository {
     /**

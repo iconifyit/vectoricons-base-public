@@ -3,8 +3,8 @@ const { createEntityFromModel } = require('../../common/BaseEntity');
 const DB = require('@vectoricons.net/db');
 
 /**
- * Represents an order item in the system.
- * Extends BaseEntity to include common entity functionality.
+ * @module Orders Domain
+ * @fileoverview OrderItemEntity - Immutable order item representation.
  */
 class OrderItemEntity extends createEntityFromModel(DB.orderItems, {}, {
     allowedColumns: [

@@ -4,9 +4,8 @@ const BaseRepository = require('../../common/BaseRepository');
 const EntityToCategoriesEntity = require('./EntityToCategoriesEntity');
 
 /**
- * Provides DB operations for entity-to-categories.
- * Extends BaseRepository to include common repository functionality.
- * @extends BaseRepository
+ * @module Products Domain
+ * @fileoverview EntityToCategoriesRepository - Provides DB operations for entity-to-categories.
  */
 class EntityToCategoriesRepository extends BaseRepository {
     constructor({ DB }) {

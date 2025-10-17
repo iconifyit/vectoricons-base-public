@@ -2,7 +2,11 @@ const AWS = require('aws-sdk');
 AWS.config.update({ region: process.env.AWS_REGION || 'us-east-1' });
 
 /**
- * SNSService provides methods to interact with AWS SNS.
+ * @module AWS Integration
+ * @fileoverview SNSService - AWS Simple Notification Service integration for pub/sub messaging.
+ *
+ * SNSService provides methods to interact with AWS SNS for publishing messages,
+ * managing subscriptions, and topic operations.
  */
 class SNSService {
     #client;

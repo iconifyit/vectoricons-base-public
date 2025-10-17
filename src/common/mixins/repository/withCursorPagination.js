@@ -1,4 +1,5 @@
 /**
+ * @module Cursor Pagination
  * @fileoverview withCursorPagination - Mixin for cursor-based pagination in repositories.
  *
  * Adds efficient keyset pagination to repositories, solving the performance issues

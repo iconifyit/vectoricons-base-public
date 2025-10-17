@@ -5,8 +5,8 @@ const EntityToTagsRepository = require('./EntityToTagsRepository');
 const EntityToTagsEntity = require('./EntityToTagsEntity');
 
 /**
- * Service for managing tags.
- * @extends BaseService
+ * @module Products Domain
+ * @fileoverview EntityToTagsService - Service for managing entity-to-tags.
  */
 class EntityToTagsService extends BaseService {
     constructor({ repository, entityClass } = {}) {

@@ -1,4 +1,5 @@
 /**
+ * @module Products Domain
  * @fileoverview IconService - Domain service for icon management.
  *
  * This is a concrete example of how domain services extend BaseService with

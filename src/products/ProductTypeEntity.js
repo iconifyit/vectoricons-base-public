@@ -1,6 +1,6 @@
 /**
- * Product type entity stub for portfolio documentation.
- * Full implementation removed for portfolio.
+ * @module Products Domain
+ * @fileoverview ProductTypeEntity stub for portfolio documentation.
  * @class ProductTypeEntity
  */
 class ProductTypeEntity {

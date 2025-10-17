@@ -3,8 +3,8 @@ const { createEntityFromModel } = require('../../common/BaseEntity');
 const DB = require('@vectoricons.net/db');
 
 /**
- * Represents a Set item in the system.
- * Extends BaseEntity to include common entity functionality.
+ * @module Products Domain
+ * @fileoverview SetEntity - Immutable set representation.
  */
 class SetEntity extends createEntityFromModel(DB.sets, {}, {
     allowedColumns: [

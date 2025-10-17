@@ -1,4 +1,5 @@
 /**
+ * @module AWS Integration
  * @fileoverview S3Service - AWS S3 integration for file storage and retrieval.
  *
  * This service provides a clean abstraction over AWS S3 SDK for common file operations

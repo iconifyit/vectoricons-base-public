@@ -3,8 +3,8 @@ const { createEntityFromModel } = require('../../common/BaseEntity');
 const DB = require('@vectoricons.net/db');
 
 /**
- * Represents a tag item in the system.
- * Extends BaseEntity to include common entity functionality.
+ * @module Products Domain
+ * @fileoverview TagEntity - Immutable tag representation.
  */
 class TagEntity extends createEntityFromModel(DB.tags, {}, {
     allowedColumns: [

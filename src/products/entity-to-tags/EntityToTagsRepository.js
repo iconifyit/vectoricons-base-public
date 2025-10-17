@@ -4,9 +4,8 @@ const BaseRepository = require('../../common/BaseRepository');
 const EntityToTagsEntity = require('./EntityToTagsEntity');
 
 /**
- * Provides DB operations for tags.
- * Extends BaseRepository to include common repository functionality.
- * @extends BaseRepository
+ * @module Products Domain
+ * @fileoverview EntityToTagsRepository - Provides DB operations for entity-to-tags.
  */
 class EntityToTagsRepository extends BaseRepository {
     constructor({ DB }) {

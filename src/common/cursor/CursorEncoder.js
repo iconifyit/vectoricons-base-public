@@ -1,4 +1,5 @@
 /**
+ * @module Cursor Pagination
  * @fileoverview CursorEncoder - Utilities for encoding/decoding cursor pagination tokens.
  *
  * Provides secure, base64-encoded cursor tokens for keyset pagination. Cursors contain

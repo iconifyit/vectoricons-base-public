@@ -3,8 +3,8 @@ const { createEntityFromModel } = require('../../common/BaseEntity');
 const DB = require('@vectoricons.net/db');
 
 /**
- * Represents a Illustration item in the system.
- * Extends BaseEntity to include common entity functionality.
+ * @module Products Domain
+ * @fileoverview IllustrationEntity - Immutable illustration representation.
  */
 class IllustrationEntity extends createEntityFromModel(DB.illustrations, {}, {
     allowedColumns: [

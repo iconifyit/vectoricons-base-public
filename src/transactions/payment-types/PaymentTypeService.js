@@ -5,8 +5,8 @@ const PaymentTypeEntity = require('./PaymentTypeEntity');
 const PaymentTypeRepository = require('./PaymentTypeRepository');
 
 /**
- * Service class for managing payment types.
- * Extends BaseService to include common service functionality.
+ * @module Transactions Domain
+ * @fileoverview PaymentTypeService - Service for managing payment types.
  */
 class PaymentTypeService extends BaseService {
     constructor({ 

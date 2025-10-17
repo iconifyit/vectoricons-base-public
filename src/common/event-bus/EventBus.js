@@ -10,6 +10,7 @@ const MemoryEventBusAdapter = require('./adapters/MemoryAdapter.js');
 let adapter = new MemoryEventBusAdapter();
 
 /**
+ * @module Event System
  * @fileoverview EventBus - Event-driven pub/sub system for decoupled architecture.
  *
  * EventBus implements the Observer Pattern (also called Pub/Sub) to enable loosely-coupled

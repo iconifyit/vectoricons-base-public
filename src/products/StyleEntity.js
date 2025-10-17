@@ -1,6 +1,6 @@
 /**
- * Style entity stub for portfolio documentation.
- * Full implementation removed for portfolio.
+ * @module Products Domain
+ * @fileoverview StyleEntity stub for portfolio documentation.
  * @class StyleEntity
  */
 class StyleEntity {

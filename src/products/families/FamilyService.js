@@ -6,11 +6,9 @@ const DB = require('@vectoricons.net/db');
 const { withSoftDeletable, withActivatable } = require('../../common/mixins/service');
 
 /**
- * FamilyService class
+ * @module Products Domain
+ * @fileoverview FamilyService - Service for managing family data with soft delete and activation support.
  * @class FamilyService
- * @description This class is responsible for managing family data.
- * It provides methods to interact with the FamilyRepository and perform operations on FamilyEntity.
- * Supports soft delete and activation management.
  */
 class FamilyService extends withSoftDeletable(withActivatable(BaseService)) {
     constructor({ repository, entityClass } = {}) {

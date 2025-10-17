@@ -4,8 +4,8 @@ const { createEntityFromModel } = require('../../common/BaseEntity');
 const DB = require('@vectoricons.net/db');
 
 /**
- * Represents a transactions-view item in the system.
- * Extends BaseEntity to include common entity functionality.
+ * @module Transactions Domain
+ * @fileoverview TransactionsViewEntity - Immutable transactions-view representation.
  */
 class TransactionsViewEntity extends createEntityFromModel(DB.transactionsView, {}, {
     allowedColumns: [

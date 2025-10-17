@@ -5,9 +5,9 @@ const TransactionItemEntity = require('./TransactionItemEntity');
 const TransactionItemRepository = require('./TransactionItemRepository');
 
 /**
- * TransactionItemService class
+ * @module Transactions Domain
+ * @fileoverview TransactionItemService - Service for managing transaction items business logic.
  * @class TransactionItemService
- * @description This class is responsible for managing transaction items business logic.
  */
 class TransactionItemService extends BaseService {
     constructor({ 

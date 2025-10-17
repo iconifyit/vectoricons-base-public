@@ -3,8 +3,8 @@ const { createEntityFromModel } = require('../../common/BaseEntity');
 const DB = require('@vectoricons.net/db');
 
 /**
- * Represents a style item in the system.
- * Extends BaseEntity to include common entity functionality.
+ * @module Products Domain
+ * @fileoverview StyleEntity - Immutable style representation.
  */
 class StyleEntity extends createEntityFromModel(DB.styles, {}, {
     allowedColumns: [

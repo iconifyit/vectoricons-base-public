@@ -4,8 +4,8 @@ const BaseRepository = require('../../common/BaseRepository');
 const StyleEntity = require('./StyleEntity');
 
 /**
- * Provides DB operations for styles.
- * @extends BaseRepository
+ * @module Products Domain
+ * @fileoverview StyleRepository - Provides DB operations for styles.
  */
 class StyleRepository extends BaseRepository {
     constructor({ DB }) {

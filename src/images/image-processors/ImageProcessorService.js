@@ -1,3 +1,7 @@
+/**
+ * @module Images Domain
+ * @fileoverview ImageProcessorService - Validates and processes image uploads.
+ */
 class ImageProcessorService {
     static async getInstance() {
         return new ImageProcessorService();

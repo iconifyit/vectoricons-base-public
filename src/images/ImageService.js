@@ -7,8 +7,8 @@ const { withActivatable, withPluggableCacheableAndSoftDeletable } = require('../
 const DB = require('@vectoricons.net/db');
 
 /**
- * ImageService
- * Composes BaseService with Observability + (Pluggable + Cacheable + SoftDelete + Activatable) mixins.
+ * @module Images Domain
+ * @fileoverview ImageService - Composes BaseService with Observability + (Pluggable + Cacheable + SoftDelete + Activatable) mixins.
  */
 class ImageService extends withActivatable(withPluggableCacheableAndSoftDeletable(BaseService)) {
     constructor({ repository, entityClass, cache, events } = {}) {

@@ -1,6 +1,7 @@
 /* eslint-env node */
 
 /**
+ * @module Core Infrastructure
  * @fileoverview BaseService - Business Logic Layer with Mixin Composition
  *
  * This is the heart of the Service-Oriented Architecture. BaseService provides:

@@ -5,8 +5,8 @@ const EntityToCategoriesRepository = require('./EntityToCategoriesRepository');
 const EntityToCategoriesEntity = require('./EntityToCategoriesEntity');
 
 /**
- * Service for managing entity-to-categories.
- * @extends BaseService
+ * @module Products Domain
+ * @fileoverview EntityToCategoriesService - Service for managing entity-to-categories.
  */
 class EntityToCategoriesService extends BaseService {
     constructor({ repository, entityClass } = {}) {

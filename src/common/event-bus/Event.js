@@ -1,5 +1,13 @@
 const { deepFreeze } = require('../../utils/index.js');
 
+/**
+ * @module Event System
+ * @fileoverview Event - Immutable event wrapper with metadata for pub/sub system.
+ *
+ * Event class provides a standardized envelope for event data with timestamp,
+ * actor information, and trace IDs for distributed tracing.
+ */
+
 class Event {
     constructor(name, data) {
         this.name         = name;

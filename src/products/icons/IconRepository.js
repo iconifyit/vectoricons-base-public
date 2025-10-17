@@ -4,6 +4,11 @@ const IconEntity     = require('./IconEntity');
 const { withCursorPagination } = require('../../common/mixins/repository');
 
 /**
+ * @module Products Domain
+ * @fileoverview IconRepository - Provides DB operations for icons with cursor pagination.
+ */
+
+/**
  * Raw Icon Repository before mixin application.
  *
  * Provides basic icon data access methods. Extended with cursor pagination

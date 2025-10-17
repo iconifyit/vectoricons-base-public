@@ -6,9 +6,9 @@ const BaseRepository = require('../../common/BaseRepository');
 const ProductTypeEntity = require('./ProductTypeEntity');
 
 /**
- * ProductTypeRepository class
+ * @module Products Domain
+ * @fileoverview ProductTypeRepository - Manages product_types data.
  * @class ProductTypeRepository
- * @description This class is responsible for managing product_types data.
  */
 class ProductTypeRepository extends BaseRepository {
     constructor({ DB }) {

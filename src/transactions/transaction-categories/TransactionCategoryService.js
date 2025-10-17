@@ -5,9 +5,9 @@ const TransactionCategoryEntity = require('./TransactionCategoryEntity');
 const TransactionCategoryRepository = require('./TransactionCategoryRepository');
 
 /**
- * TransactionCategoryService class
+ * @module Transactions Domain
+ * @fileoverview TransactionCategoryService - Service for managing transaction categories business logic.
  * @class TransactionCategoryService
- * @description This class is responsible for managing transaction categories business logic.
  */
 class TransactionCategoryService extends BaseService {
     constructor({ 
