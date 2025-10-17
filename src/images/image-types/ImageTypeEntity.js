@@ -2,7 +2,7 @@ const { createEntityFromModel } = require('../../common/BaseEntity');
 const DB = require('@vectoricons.net/db');
 
 /**
- * Represents an image entity in the system.
+ * Represents image type metadata in the system.
  */
 class ImageTypeEntity extends createEntityFromModel(DB.imageTypes, {}, {
     allowedColumns: [

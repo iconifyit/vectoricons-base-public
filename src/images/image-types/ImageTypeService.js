@@ -1,4 +1,4 @@
-// Path: src/images/ImageService.js
+// Path: src/images/image-types/ImageTypeService.js
 const ImageTypeRepository = require('./ImageTypeRepository');
 const ImageTypeEntity = require('./ImageTypeEntity');
 const BaseService = require('../../common/BaseService');

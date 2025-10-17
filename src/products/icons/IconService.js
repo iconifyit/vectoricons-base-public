@@ -202,6 +202,248 @@ class IconService extends withActivatable(withPluggableCacheableAndSoftDeletable
     async getAllActiveIcons(options = {}) {
         return this.repository.findAllActive(options);
     }
+
+    /**
+     * Paginate icons using cursor-based keyset pagination.
+     *
+     * Provides efficient pagination for large icon datasets (750K+ icons) with
+     * support for complex search facets including:
+     * - Price filtering (free, premium, all)
+     * - Tag filtering (multiple tags)
+     * - Style filtering
+     * - User/creator filtering
+     * - Set and family filtering
+     * - Text search
+     * - Elasticsearch result IDs
+     *
+     * **Performance:**
+     * - O(log n + limit) vs O(n) for offset pagination
+     * - Consistent results even when data changes
+     * - No "page drift" from concurrent modifications
+     *
+     * **Cursor Format:**
+     * Cursors are base64-encoded tokens containing the last seen item's sort fields.
+     * Use `pageInfo.endCursor` from one page as the `cursor` parameter for the next page.
+     *
+     * @param {Object} filters - Search facets and filter criteria
+     * @param {string} [filters.price] - 'free', 'premium', or 'all'
+     * @param {Array<number>} [filters.tagIds] - Array of tag IDs to filter by
+     * @param {number} [filters.styleId] - Style ID to filter by
+     * @param {number} [filters.userId] - Creator user ID to filter by
+     * @param {number} [filters.setId] - Set ID to filter by
+     * @param {number} [filters.familyId] - Family ID to filter by
+     * @param {string} [filters.searchTerm] - Text search on icon name
+     * @param {Array<number>} [filters.iconIds] - Specific icon IDs (e.g., from Elasticsearch)
+     * @param {boolean} [filters.isActive] - Filter by active status
+     * @param {boolean} [filters.isDeleted] - Filter by deleted status
+     * @param {string|null} cursor - Cursor token from previous page (null for first page)
+     * @param {number} [limit=20] - Page size (max 100)
+     * @param {string} [sortBy='createdAt'] - Field to sort by
+     * @param {string} [sortOrder='desc'] - 'asc' or 'desc'
+     * @param {Object} [options={}] - Additional options
+     * @param {boolean} [options.includeTotalCount=false] - Whether to include total count (expensive!)
+     * @param {Object} [options.trx] - Knex transaction
+     *
+     * @returns {Promise<Object>} Pagination result with results and metadata
+     *
+     * @example
+     * // First page (newest free icons)
+     * const page1 = await iconService.cursorPaginate({
+     *   price: 'free'
+     * }, null, 20, 'createdAt', 'desc');
+     *
+     * console.log(page1.results);           // IconEntity[]
+     * console.log(page1.pageInfo.hasNextPage); // true
+     * console.log(page1.pageInfo.endCursor);   // 'eyJpZC...'
+     *
+     * @example
+     * // Next page (using cursor from page1)
+     * const page2 = await iconService.cursorPaginate({
+     *   price: 'free'
+     * }, page1.pageInfo.endCursor, 20);
+     *
+     * @example
+     * // Complex search with multiple facets
+     * const results = await iconService.cursorPaginate({
+     *   price: 'free',
+     *   tagIds: [1, 2, 3],      // Icons with these tags
+     *   styleId: 5,              // Specific design style
+     *   searchTerm: 'home',      // Text search
+     *   userId: 123              // From specific creator
+     * }, null, 20);
+     *
+     * @example
+     * // With Elasticsearch integration
+     * const elasticResults = await elasticsearchService.search('home icon');
+     * const iconIds = elasticResults.hits.map(h => h.id);
+     *
+     * const results = await iconService.cursorPaginate({
+     *   iconIds: iconIds,  // Only these icon IDs
+     *   price: 'free'
+     * }, null, 20);
+     *
+     * @example
+     * // Oldest icons first (ascending sort)
+     * const oldestIcons = await iconService.cursorPaginate({
+     *   price: 'all'
+     * }, null, 20, 'createdAt', 'asc');
+     */
+    async cursorPaginate(
+        filters = {},
+        cursor = null,
+        limit = 20,
+        sortBy = 'createdAt',
+        sortOrder = 'desc',
+        options = {}
+    ) {
+        return this.repository.cursorPaginate({
+            filters,
+            cursor,
+            limit,
+            sortBy,
+            sortOrder,
+            includeTotalCount: options.includeTotalCount || false,
+            entityClass: this.entityClass,
+            entityOptions: {},
+            trx: options.trx,
+        });
+    }
+
+    /**
+     * Paginate icons with search facets (convenience method).
+     *
+     * Simplified interface for cursor pagination with common search facets.
+     * Delegates to cursorPaginate() with pre-configured defaults.
+     *
+     * **Sorting Options:**
+     * - `'newest'` - Sort by created_at DESC (PostgreSQL)
+     * - `'bestseller'` - Sort by popularity DESC (PostgreSQL)
+     * - `'relevance'` - Sort by Elasticsearch relevance (requires iconIds)
+     *
+     * @param {Object} params - Search parameters
+     * @param {string} [params.price='all'] - Price filter
+     * @param {Array<number>} [params.tagIds=[]] - Tag IDs
+     * @param {number} [params.styleId] - Style ID
+     * @param {string} [params.searchTerm] - Text search
+     * @param {Array<number>} [params.iconIds] - Icon IDs from Elasticsearch (for relevance sort)
+     * @param {string} [params.cursor] - Cursor token
+     * @param {number} [params.limit=20] - Page size
+     * @param {string} [params.sort='newest'] - Sort type ('newest', 'bestseller', or 'relevance')
+     * @param {Object} [options={}] - Additional options
+     *
+     * @returns {Promise<Object>} Pagination result
+     *
+     * @example
+     * // Simple search (newest first)
+     * const results = await iconService.searchIcons({
+     *   price: 'free',
+     *   searchTerm: 'home',
+     *   sort: 'newest',
+     *   limit: 20
+     * });
+     *
+     * @example
+     * // Bestsellers
+     * const bestsellers = await iconService.searchIcons({
+     *   price: 'all',
+     *   sort: 'bestseller',
+     *   limit: 20
+     * });
+     *
+     * @example
+     * // Elasticsearch relevance sorting
+     * const esResults = await elasticsearchService.search('home icon');
+     * const iconIds = esResults.hits.map(h => h.id);
+     *
+     * const results = await iconService.searchIcons({
+     *   iconIds: iconIds,      // Ranked IDs from Elasticsearch
+     *   price: 'free',
+     *   sort: 'relevance',     // Preserves Elasticsearch ranking
+     *   limit: 20
+     * });
+     *
+     * @example
+     * // Next page (same sort and filters)
+     * const page2 = await iconService.searchIcons({
+     *   iconIds: iconIds,      // SAME IDs for consistency
+     *   price: 'free',
+     *   sort: 'relevance',
+     *   cursor: results.pageInfo.endCursor,
+     *   limit: 20
+     * });
+     */
+    async searchIcons(params = {}, options = {}) {
+        const {
+            price = 'all',
+            tagIds = [],
+            styleId,
+            userId,
+            setId,
+            familyId,
+            searchTerm,
+            iconIds,
+            cursor = null,
+            limit = 20,
+            sort = 'newest',
+        } = params;
+
+        // Map sort type to sortBy/sortOrder
+        let sortBy, sortOrder;
+        let filters;
+
+        if (sort === 'relevance' && iconIds && iconIds.length > 0) {
+            // Relevance sorting: use array position with Elasticsearch order
+            sortBy = 'relevance';
+            sortOrder = 'asc';  // Array positions are ascending (1, 2, 3, ...)
+            filters = {
+                price,
+                tagIds: tagIds.length > 0 ? tagIds : undefined,
+                styleId,
+                userId,
+                setId,
+                familyId,
+                searchTerm,
+                iconIdsOrder: iconIds,  // Use iconIdsOrder to preserve ES ranking
+            };
+        } else if (sort === 'bestseller') {
+            // Bestseller sorting: PostgreSQL popularity field
+            sortBy = 'popularity';
+            sortOrder = 'desc';
+            filters = {
+                price,
+                tagIds: tagIds.length > 0 ? tagIds : undefined,
+                styleId,
+                userId,
+                setId,
+                familyId,
+                searchTerm,
+                iconIds: iconIds && iconIds.length > 0 ? iconIds : undefined,
+            };
+        } else {
+            // Newest sorting (default): PostgreSQL created_at field
+            sortBy = 'createdAt';
+            sortOrder = 'desc';
+            filters = {
+                price,
+                tagIds: tagIds.length > 0 ? tagIds : undefined,
+                styleId,
+                userId,
+                setId,
+                familyId,
+                searchTerm,
+                iconIds: iconIds && iconIds.length > 0 ? iconIds : undefined,
+            };
+        }
+
+        return this.cursorPaginate(
+            filters,
+            cursor,
+            limit,
+            sortBy,
+            sortOrder,
+            options
+        );
+    }
 }
 
 module.exports = IconService;

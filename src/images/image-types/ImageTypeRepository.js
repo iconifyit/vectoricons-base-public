@@ -1,4 +1,4 @@
-// Path: src/images/image-types/ImageRepository.js
+// Path: src/images/image-types/ImageTypeRepository.js
 const DB = require('@vectoricons.net/db');
 const BaseRepository = require('../../common/BaseRepository');
 const ImageTypeEntity = require('./ImageTypeEntity');
