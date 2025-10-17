@@ -33,7 +33,7 @@ class CartService extends withPluggable(BaseService) {
     /**
      * @param {Object} opts
      * @param {CartRepository} [opts.repository]        - repository for carts
-     * @param {typeof CartEntity} [opts.entityClass]     - entity class for carts
+     * @param {Function} [opts.entityClass]     - entity class for carts
      * @param {CartItemRepository} [opts.cartItemRepository]
      * @param {Object} [opts.services]                   - cross-module service registry (init<Service>Service() instances)
      *   {

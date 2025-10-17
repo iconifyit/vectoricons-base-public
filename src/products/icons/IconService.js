@@ -125,7 +125,7 @@ class IconService extends withActivatable(withPluggableCacheableAndSoftDeletable
      *
      * @param {Object} [options={}] - Service configuration
      * @param {IconRepository} [options.repository] - Icon repository instance
-     * @param {typeof IconEntity} [options.entityClass] - Icon entity class
+     * @param {Function} [options.entityClass] - Icon entity class
      *
      * @example
      * // Default construction

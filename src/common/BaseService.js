@@ -595,7 +595,7 @@ class RawBaseService  {
  *   ))))));
  * ```
  *
- * @type {typeof RawBaseService}
+ * @type {Class}
  * @see {@link withObservable} For observability mixin documentation
  */
 const BaseService = withObservable(RawBaseService);

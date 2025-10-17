@@ -179,7 +179,7 @@ class TransactionRepository extends BaseRepository {
 
     /**
      * Get all payment types.
-=     * @returns {[]PaymentTypeEntity} - An array of payment type entities.
+     * @returns {Array.<PaymentTypeEntity>} - An array of payment type entities.
      * @throws {Error} - If an error occurs.
      */
     async getPaymentTypes() {
@@ -194,7 +194,7 @@ class TransactionRepository extends BaseRepository {
 
     /**
      * Get all transaction types.
-     * @returns {[]TransactionTypeEntity} - An array of transaction type entities.
+     * @returns {Array.<TransactionTypeEntity>} - An array of transaction type entities.
      * @throws {Error} - If an error occurs.
      */
     async getTransactionTypes() {
@@ -209,7 +209,7 @@ class TransactionRepository extends BaseRepository {
 
     /**
      * Get all transaction categories.
-     * @returns {[]TransactionCategoryEntity} - An array of transaction category entities.
+     * @returns {Array.<TransactionCategoryEntity>} - An array of transaction category entities.
      * @throws {Error} - If an error occurs.
      */
     async getTransactionCategories() {

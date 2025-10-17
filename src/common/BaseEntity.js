@@ -466,7 +466,7 @@ const createEntityFromModel = (
 /**
  * Map an object's keys using a transform function.
  * @param {Object} obj
- * @param {(k:string)=>string} fn
+ * @param {function(string):string} fn
  * @returns {Object}
  */
 const mapKeys = (obj, fn) => {
