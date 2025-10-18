@@ -21,6 +21,7 @@ const schemas = require('../schemas/images');
  * - PATCH /image/:id
  * - DELETE /image/:id
  * Each route supports appropriate query parameters and request bodies as defined in the schemas.
+ * @name imagesPlugin
  * @param {FastifyInstance} fastify
  * @param {Object} opts
  * @returns {Promise<void>}

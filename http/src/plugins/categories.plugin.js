@@ -22,6 +22,7 @@ const schemas = require('../schemas/categories');
  * - PATCH /category/:id
  * - DELETE /category/:id
  * Each route supports appropriate query parameters and request bodies as defined in the schemas.
+ * @name categoriesPlugin
  * @param {FastifyInstance} fastify
  * @param {Object} opts
  * @returns {Promise<void>}

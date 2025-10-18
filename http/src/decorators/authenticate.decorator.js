@@ -9,8 +9,8 @@ const { initUserToRolesService }   = require('../../../src/users/user-to-roles')
 // =============================================================
 
 /**
- * @param {import('fastify').FastifyRequest} request
- * @param {import('fastify').FastifyReply} reply
+ * @param {Object} request - Fastify request object
+ * @param {Object} reply - Fastify reply object
  */
 const authenticate = async (request, reply) => {
     try {

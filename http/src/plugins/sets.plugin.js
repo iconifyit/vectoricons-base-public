@@ -22,6 +22,7 @@ const schemas = require('../schemas/sets');
  * - PATCH /set/:id
  * - DELETE /set/:id
  * Each route supports appropriate query parameters and request bodies as defined in the schemas.
+ * @name setsPlugin
  * @param {FastifyInstance} fastify
  * @param {Object} opts
  * @returns {Promise<void>}

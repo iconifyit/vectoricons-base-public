@@ -16,6 +16,7 @@ const schemas = require('../schemas/icons');
  * - PATCH /icon/:id
  * - DELETE /icon/:id
  * Each route supports appropriate query parameters and request bodies as defined in the schemas.
+ * @name iconsPlugin
  * @param {FastifyInstance} fastify
  * @param {Object} opts
  * @returns {Promise<void>}

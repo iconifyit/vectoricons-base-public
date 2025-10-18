@@ -32,6 +32,22 @@ const modules = {
   'Favorites Domain': ['FavoriteService', 'FavoriteRepository', 'FavoriteEntity']
 };
 
+// HTTP API Layer has special structure with plugins and factory methods
+const httpApiLayer = {
+  plugins: ['iconsPlugin', 'familiesPlugin', 'setsPlugin', 'categoriesPlugin', 'tagsPlugin', 'imagesPlugin'],
+  factoryMethods: ['list', 'getItem', 'createItem', 'patchItem', 'deleteItem', 'makeCrudPlugin']
+};
+
+// Plugin display names
+const pluginDisplayNames = {
+  'iconsPlugin': 'Icons Plugin',
+  'familiesPlugin': 'Families Plugin',
+  'setsPlugin': 'Sets Plugin',
+  'categoriesPlugin': 'Categories Plugin',
+  'tagsPlugin': 'Tags Plugin',
+  'imagesPlugin': 'Images Plugin'
+};
+
 function organizeNavigation(htmlContent) {
   // Find the navigation section
   const navMatch = htmlContent.match(/<nav>([\s\S]*?)<\/nav>/);
@@ -148,8 +164,37 @@ function buildFullNavigation(depth = 0) {
     organizedHTML.push('</ul>');
   }
 
+  // Add HTTP API Layer with special structure
+  const pluginLinks = masterLinks.filter(link => httpApiLayer.plugins.includes(link.name));
+  const factoryLinks = masterLinks.filter(link => httpApiLayer.factoryMethods.includes(link.name));
+
+  if (pluginLinks.length > 0 || factoryLinks.length > 0) {
+    organizedHTML.push('<h3>HTTP API Layer</h3>');
+    organizedHTML.push('<ul>');
+
+    // Add plugins with readable names
+    pluginLinks.forEach(link => {
+      const displayName = pluginDisplayNames[link.name] || link.name;
+      organizedHTML.push(`<li><a href="${prefix}${link.href}">${displayName}</a></li>`);
+    });
+
+    // Add factory methods as indented sub-items
+    if (factoryLinks.length > 0) {
+      organizedHTML.push('<li style="margin-top: 8px; font-style: italic; color: #666;">Factory Methods:</li>');
+      factoryLinks.forEach(link => {
+        organizedHTML.push(`<li style="margin-left: 20px;"><a href="${prefix}${link.href}">${link.name}</a></li>`);
+      });
+    }
+
+    organizedHTML.push('</ul>');
+  }
+
   // Add "Other" section for remaining classes
-  const usedNames = new Set(Object.values(modules).flat());
+  const usedNames = new Set([
+    ...Object.values(modules).flat(),
+    ...httpApiLayer.plugins,
+    ...httpApiLayer.factoryMethods
+  ]);
   const otherLinks = masterLinks.filter(link => !usedNames.has(link.name) && !link.href.startsWith('global.html'));
   if (otherLinks.length > 0) {
     organizedHTML.push('<h3>Other</h3>');

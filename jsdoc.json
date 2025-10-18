@@ -25,17 +25,19 @@
       "src/orders",
       "src/transactions",
       "src/downloads",
-      "src/favorites"
+      "src/favorites",
+      "http/src"
     ],
     "includePattern": ".+\\.(js|jsx)$",
-    "excludePattern": "(node_modules|__tests__|test|spec)"
+    "excludePattern": "(node_modules|__tests__|test|spec|decorators)"
   },
   "opts": {
     "template": "node_modules/better-docs",
     "encoding": "utf8",
     "destination": "./docs",
     "recurse": true,
-    "verbose": true
+    "verbose": true,
+    "readme": "OVERVIEW.md"
   },
   "plugins": [
     "plugins/markdown"

@@ -22,6 +22,7 @@ const schemas = require('../schemas/families');
  * - PATCH /family/:id
  * - DELETE /family/:id
  * Each route supports appropriate query parameters and request bodies as defined in the schemas.
+ * @name familiesPlugin
  * @param {FastifyInstance} fastify
  * @param {Object} opts
  * @returns {Promise<void>}

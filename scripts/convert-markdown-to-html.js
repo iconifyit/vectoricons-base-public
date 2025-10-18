@@ -158,11 +158,11 @@ function convertMarkdownFile(mdPath, htmlPath, title, cssPrefix = '') {
   console.log(`✅ Converted ${path.basename(mdPath)} → ${path.basename(htmlPath)}`);
 }
 
-// Convert README.md to index.html (home page)
+// Convert OVERVIEW.md to index.html (home page)
 convertMarkdownFile(
-  path.join(__dirname, '..', 'README.md'),
+  path.join(__dirname, '..', 'OVERVIEW.md'),
   path.join(docsDir, 'index.html'),
-  'VectorIcons - Icon Marketplace Backend Architecture'
+  'Backend Architecture Portfolio'
 );
 
 // Convert ECOSYSTEM.md

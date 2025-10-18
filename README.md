@@ -1278,10 +1278,11 @@ For security and proprietary reasons, the following are excluded from this portf
 
 **Developer:** Scott Lewis
 
-[**LinkedIn**](https://www.linkedin.com/in/scott-lewis-full-stack/?lipi=urn%3Ali%3Apage%3Ad_flagship3_feed%3B0cWdLu3lTXOacLk9lrP6lA%3D%3D)<br>
-[**GitHub**](https://github.com/iconifyit)
+**LinkedIn:** [Your LinkedIn URL]
+**GitHub:** [Your GitHub Profile]
+**Email:** [Your Email]
 
-**Looking for:** Senior Backend Engineer / Staff Engineer roles focusing on Node.js/TypeScript.js, distributed systems, and cloud architecture, globally remote/work from anywhere in the US or Europe.
+**Looking for:** Senior Backend Engineer / Staff Engineer roles focusing on Node.js, distributed systems, and cloud architecture
 
 ---
 

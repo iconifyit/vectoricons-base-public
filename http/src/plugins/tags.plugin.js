@@ -13,6 +13,7 @@ const { initTagService, TagEntity } = require('../../../src/products/tags');
  * - PATCH /tag/:id
  * - DELETE /tag/:id
  * Each route supports appropriate query parameters and request bodies as defined in the schemas.
+ * @name tagsPlugin
  * @param {FastifyInstance} fastify
  * @param {Object} opts
  * @returns {Promise<void>}
