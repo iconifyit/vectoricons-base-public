@@ -1316,6 +1316,30 @@ cd vectoricons-portfolio
 
 For deeper insights into the technical decisions and future direction:
 
+### Architecture & Design
+
+- **[ECOSYSTEM.md](./docs/ECOSYSTEM.md)** - Complete system architecture overview
+  - All 4 components (Base SOA, Image Pipeline, Batch Converter, Infrastructure)
+  - System architecture diagram showing entire distributed system
+  - CI/CD pipeline workflow
+  - Performance metrics (16x speedup, 750K+ assets)
+  - Technology stack summary
+
+- **[Architecture Decision Records](./docs/decisions/)** - Technical decision-making process
+  - [ADR-001: Service-Oriented Architecture](./docs/decisions/ADR-001-service-oriented-architecture.md)
+  - [ADR-002: Mixin Pattern for Code Reuse](./docs/decisions/ADR-002-mixin-pattern.md)
+  - [ADR-003: Event-Driven Architecture](./docs/decisions/ADR-003-event-driven-architecture.md)
+  - [ADR-004: Contract-Based Testing](./docs/decisions/ADR-004-contract-based-testing.md)
+  - [ADR-005: Entity Immutability](./docs/decisions/ADR-005-entity-immutability.md)
+
+- **[ARCHITECTURE-DECISIONS.md](./ARCHITECTURE-DECISIONS.md)** - Summary of key architectural choices
+  - Why mixins over inheritance?
+  - Why EventBus over direct dependencies?
+  - Why Objection.js over Sequelize?
+  - Trade-offs and lessons learned
+
+### Implementation Guides
+
 - **[CURSOR-PAGINATION.md](./CURSOR-PAGINATION.md)** - Complete cursor pagination implementation guide
   - Three sorting dimensions (newest, bestseller, relevance)
   - Hybrid Elasticsearch + PostgreSQL architecture
@@ -1323,17 +1347,13 @@ For deeper insights into the technical decisions and future direction:
   - Array position pagination innovation
   - Migration from offset pagination
 
-- **[ARCHITECTURE-DECISIONS.md](./ARCHITECTURE-DECISIONS.md)** - Detailed rationale for key architectural choices
-  - Why mixins over inheritance?
-  - Why EventBus over direct dependencies?
-  - Why Objection.js over Sequelize?
-  - Trade-offs and lessons learned
-
 - **[PORTFOLIO-IMPROVEMENTS.md](./PORTFOLIO-IMPROVEMENTS.md)** - Roadmap to take this from 8/10 to 9/10
   - JSDoc documentation expansion
   - HTTP layer examples
   - Performance metrics
   - Circuit breaker patterns
+
+### API Documentation
 
 - **[API Documentation](https://docs.vectoricons.net)** - Live API documentation (when available)
 

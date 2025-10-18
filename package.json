@@ -18,7 +18,7 @@
     "test:integration": "jest --selectProjects integration --verbose --noStackTrace --runInBand",
     "test:coverage": "jest --coverage --noStackTrace --runInBand",
     "test:watch": "jest --watch",
-    "docs:generate": "rm -rf docs && jsdoc -c jsdoc.json && node scripts/organize-docs-nav.js",
+    "docs:generate": "rm -rf docs && jsdoc -c jsdoc.json && cp ../docs/ECOSYSTEM.md docs/ && mkdir -p docs/decisions && cp ../docs/decisions/*.md docs/decisions/ && node scripts/convert-markdown-to-html.js && node scripts/organize-docs-nav.js",
     "docs:serve": "npx http-server docs -p 8080"
   },
   "dependencies": {
