@@ -97,10 +97,11 @@ function organizeNavigation(htmlContent) {
   return htmlContent.replace(/<nav>[\s\S]*?<\/nav>/, organizedHTML.join('\n'));
 }
 
-// First, extract all links from index.html to get the master list
-const indexPath = path.join(__dirname, '..', 'docs', 'index.html');
-const indexContent = fs.readFileSync(indexPath, 'utf8');
-const navMatch = indexContent.match(/<nav>([\s\S]*?)<\/nav>/);
+// Extract all class links from a JSDoc-generated class file (not index.html which we overwrite)
+// We use BaseEntity.html since it's always generated and has the full navigation
+const baseEntityPath = path.join(__dirname, '..', 'docs', 'BaseEntity.html');
+const baseEntityContent = fs.readFileSync(baseEntityPath, 'utf8');
+const navMatch = baseEntityContent.match(/<nav>([\s\S]*?)<\/nav>/);
 
 let masterLinks = [];
 if (navMatch) {

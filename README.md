@@ -217,12 +217,12 @@ flowchart TD
 
     CDN --> READY[Images Ready<br/>~60 seconds total]
 
-    style BATCHER fill:#FF9900,stroke:#cc7a00,color:#fff
-    style PROCESSOR fill:#FF9900,stroke:#cc7a00,color:#fff
-    style PREVIEWMAKER fill:#FF9900,stroke:#cc7a00,color:#fff
-    style QUEUE1 fill:#FF4F8B,stroke:#cc3f6f,color:#fff
-    style QUEUE2 fill:#FF4F8B,stroke:#cc3f6f,color:#fff
-    style CDN fill:#8C4FFF,stroke:#6a3acc,color:#fff
+    style BATCHER fill:#FF9900,stroke:#cc7a00,color:#000
+    style PROCESSOR fill:#FF9900,stroke:#cc7a00,color:#000
+    style PREVIEWMAKER fill:#FF9900,stroke:#cc7a00,color:#000
+    style QUEUE1 fill:#FF4F8B,stroke:#cc3f6f,color:#000
+    style QUEUE2 fill:#FF4F8B,stroke:#cc3f6f,color:#000
+    style CDN fill:#8C4FFF,stroke:#6a3acc,color:#000
 ```
 
 **Key Components:**
@@ -298,9 +298,9 @@ flowchart TD
     PERMISSION -->|Yes| GRANT
     PERMISSION -->|No| DENY[Deny Access ❌]
 
-    style DENY fill:#FF6B6B,stroke:#cc5555,color:#fff
-    style GRANT fill:#51CF66,stroke:#3fb950,color:#fff
-    style REQUEST fill:#4A90E2,stroke:#2E5C8A,color:#fff
+    style DENY fill:#FF6B6B,stroke:#cc5555,color:#000
+    style GRANT fill:#51CF66,stroke:#3fb950,color:#000
+    style REQUEST fill:#4A90E2,stroke:#2E5C8A,color:#000
 ```
 
 ---
