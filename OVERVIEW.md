@@ -15,21 +15,29 @@ VectorIcons is a production multi-vendor marketplace for vector icons and illust
 
 ## Table of Contents
 
-- [Architecture & Design](#architecture--design)
-- [Core Infrastructure](#core-infrastructure)
-- [Cursor Pagination](#cursor-pagination)
-- [Caching Layer](#caching-layer)
-- [Event System](#event-system)
-- [Access Control](#access-control)
-- [AWS Integration](#aws-integration)
-- [Products Domain](#products-domain)
-- [Images Domain](#images-domain)
-- [Carts Domain](#carts-domain)
-- [Orders Domain](#orders-domain)
-- [Transactions Domain](#transactions-domain)
-- [Downloads Domain](#downloads-domain)
-- [Favorites Domain](#favorites-domain)
-- [HTTP API Layer](#http-api-layer)
+- [VectorIcons Infrastructure Overview](#vectoricons-infrastructure-overview)
+  - [Overview](#overview)
+  - [Table of Contents](#table-of-contents)
+  - [Documentation Sections](#documentation-sections)
+    - [Architecture \& Design](#architecture--design)
+    - [Core Infrastructure](#core-infrastructure)
+    - [Cursor Pagination](#cursor-pagination)
+    - [Caching Layer](#caching-layer)
+    - [Event System](#event-system)
+    - [Access Control](#access-control)
+    - [AWS Integration](#aws-integration)
+    - [Products Domain](#products-domain)
+    - [Images Domain](#images-domain)
+    - [Carts Domain](#carts-domain)
+    - [Orders Domain](#orders-domain)
+    - [Transactions Domain](#transactions-domain)
+    - [Downloads Domain](#downloads-domain)
+    - [Favorites Domain](#favorites-domain)
+    - [HTTP API Layer](#http-api-layer)
+  - [Additional Resources](#additional-resources)
+    - [Related Documentation](#related-documentation)
+    - [Blog Posts](#blog-posts)
+    - [Professional Profile](#professional-profile)
 
 ## Documentation Sections
 
@@ -150,14 +158,14 @@ RESTful API built on Fastify with factory pattern for rapid endpoint creation, s
 
 ### Blog Posts
 
-- **[Building a Multi-Vendor Marketplace: Architecture Lessons](https://vectopus.com/blog/architecture)** - Systems design insights
-- **[16x Performance Improvement with Go Concurrency](https://vectopus.com/blog/go-performance)** - Real-world optimization case study
-- **[Contract-Based Testing at Scale](https://vectopus.com/blog/testing)** - Maintaining consistency across 78 modules
+- **[Building a Multi-Vendor Marketplace: Architecture Lessons](https://sketchandbuild.com/posts/aws-cloud-architecture-for-multivendor-marketplace)** - Systems design insights
+- **[16x Performance Improvement with Go Concurrency](https://sketchandbuild.com/posts/concurrency-model-comparison)** - Real-world optimization case study
+- **Contract-Based Testing at Scale** - (Coming Soon) Maintaining consistency across 78 modules
 
 ### Professional Profile
 
-- **[LinkedIn](https://linkedin.com/in/scott-lewis-dev)** - Connect with me professionally
-- **[GitHub](https://github.com/scott-lewis)** - More open source projects
+- **[LinkedIn](https://www.linkedin.com/in/scott-lewis-full-stack)** - Connect with me professionally
+- **[GitHub](https://github.com/iconifyit)** - More open source projects
 
 ---
 
