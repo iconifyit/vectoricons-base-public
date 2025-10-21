@@ -1355,7 +1355,7 @@ For deeper insights into the technical decisions and future direction:
 
 ### API Documentation
 
-- **[API Documentation](https://docs.vectoricons.net)** - Live API documentation (when available)
+- **[API Documentation](https://iconifyit.github.io/vectoricons-base-public/)** - Live API documentation
 
 ---
 

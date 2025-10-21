@@ -153,7 +153,7 @@ RESTful API built on Fastify with factory pattern for rapid endpoint creation, s
 
 ### Related Documentation
 
-- **[Complete README](README.md)** - Detailed technical implementation guide
+- **[Complete README](https://github.com/iconifyit/vectoricons-base-public#readme)** - Detailed technical implementation guide
 - **[GitHub Repository](https://github.com/iconifyit/vectoricons-base-public)** - Full source code
 
 ### Blog Posts
