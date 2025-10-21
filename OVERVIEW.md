@@ -170,5 +170,5 @@ RESTful API built on Fastify with factory pattern for rapid endpoint creation, s
 ---
 
 **Developer:** Scott Lewis
-**Technology Stack:** Node.js, Express.js, PostgreSQL, AWS, Go, React/Next.js
+**Technology Stack:** Node.js, Fastify, PostgreSQL, AWS, Go, React/Next.js
 **Documentation Generated:** 2025-10-18
