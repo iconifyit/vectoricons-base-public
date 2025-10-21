@@ -460,12 +460,13 @@ This ecosystem demonstrates **Staff/Principal Engineer capabilities**:
 ## Repository Structure
 
 ```
-vectopus-org/
-├── base/                      # This repo - SOA package
+base-public/
 │   ├── src/                   # 78 SOA modules
 │   ├── docs/                  # Architecture docs
 │   └── tests/                 # Contract-based tests
-│
+
+(Coming Soon)
+
 ├── image-ingestion/           # Serverless pipeline
 │   ├── lambdas/
 │   │   ├── ImageBatcher/
