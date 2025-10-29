@@ -27,8 +27,6 @@ const handler = async (event) => {
 
     console.log('Sending welcome offer email...');
 
-    // const couponService = await CouponCodeService.getInstance();
-
     const couponService = initCouponCodeService();
 
     const couponCode = await couponService.createRandom({
@@ -42,23 +40,6 @@ const handler = async (event) => {
         entity_type: CouponCodeScopes.Subscription,
     }, 8);
 
-    console.log('Coupon code created:', couponCode);
-
-    // EventBus.emit(EventTypes.NOTIFY_EMAIL, {
-    //     type: 'welcome-offer',
-    //     user: user,
-    //     data: {
-    //         name: user?.display_name,
-    //         coupon_code: couponCode?.code,
-    //         amount: couponCode?.amount,
-    //     },
-    // });
-
-    // EventBus.emit(EventTypes.NOTIFY_SLACK, {
-    //     channel: '#transactions',
-    //     message: `👋 Welcome offer sent to ${user.username}`,
-    // });
-
     await mailService.maybeSendAutoResponder({
         type: 'welcome-offer',
         user: user,
@@ -68,8 +49,6 @@ const handler = async (event) => {
             amount: couponCode?.amount,
         },
     });
-
-    // console.log('Welcome offer email sent successfully.');
 };
 
 // Register the plugin with the event bus

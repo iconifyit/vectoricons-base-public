@@ -41,15 +41,6 @@ const handler = (event) => {
     if (!type || !user || !user?.email) throw new Error('Invalid email payload');
     
      MailService.maybeSendAutoResponder({ type, user, data });
-
-    // await MailService.sendEmail(
-    //     user?.email, 
-    //     'verify-email', { 
-    //         name                : user?.first_name || 'User',
-    //         SUBJECT             : 'Welcome to Vectopus',
-    //         VERIFY_EMAIL_URL    : verifyEmailURL,
-    //     }
-    // );
 };
 
 // Register plugin once for unified notifications
